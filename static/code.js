@@ -59,7 +59,7 @@ function appInit() {
         } catch (e) {
             console.log("Error", msg, e)
         }
-    }
+    };
     //client.onConnected = () => console.log('cool!');
     client.connect({
         userName: login,
