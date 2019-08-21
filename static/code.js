@@ -4,6 +4,10 @@ const userName = prompt('Nick name')
 const messagesLog = [];
 let client = null;
 
+const activeSession = {
+    currentChannel: 'main'
+}
+
 function drawRooms() {
     var rms = document.getElementById("all_channels");
     rms.innerHTML = Array.from(rooms).join('</br>')
@@ -23,13 +27,13 @@ function sendText(keypress) {
     if (keypress.code == 'Enter') {
         const text = document.getElementById('input_text').value;
         const payload = JSON.stringify({'author': userName, 'text': text});
-        client.publish('rooms/main/newtext', payload, {qos: 1, retain: true});
+        client.publish(`rooms/${activeSession.currentChannel}/newtext`, payload, {qos: 1, retain: true});
         document.getElementById('input_text').value = '';
     }
 }
 
 function messageArrived(topic, msg) {
-    if (topic == 'rooms/main/newtext') {
+    if (topic == `rooms/${activeSession.currentChannel}/newtext`) {
         const payload = JSON.parse(msg.toString());
         const old_size = users.size;
         users.add(payload.author);
