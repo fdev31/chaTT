@@ -28,8 +28,11 @@ function appInit() {
     client.onMessageArrived = (msg) => {
         if (msg.topic == 'rooms/main/newtext') {
             const payload = JSON.parse(msg.payloadString);
+            users.add(payload.author);
             messagesLog.push(`<b>${payload.author}</b>: ${payload.text}`);
             showMessages();
+        } else if (msg.topic.match(/^rooms/)) {
+            rooms.add(msg.topic.split('/')[1]);
         }
     }
     //client.onConnected = () => console.log('cool!');
