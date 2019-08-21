@@ -63,14 +63,15 @@ def init_mqtt():
 # http routing
 
 @bottle.get('/static/<name:path>')
-def index(name):
+def static_files(name):
     return bottle.static_file(name, STATIC_FILES_PATH)
 
 @bottle.get('/')
 def index():
-    return template('./templates/index.html')
+    return template('./templates/index.html', user=USER, host=HOST, password=PASS)
 
 mqtt_runner = init_mqtt()
+
 try:
     run(host='localhost', port=8080)
 except Exception as e:

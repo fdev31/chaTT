@@ -397,6 +397,11 @@ h1{font-size:138.5%;}h2{font-size:123.1%;}h3{font-size:108%;}h1,h2,h3{margin:1em
       <div id="ft"> <input id="input_text" name="user_text" placeholder="Type your text here and press ENTER"
           autocomplete="off" type="text"> </div>
     </div>
+    <script>
+        const login="{{user}}";
+        const password="{{password}}";
+        const host="{{host}}";
+    </script>
     <script src="/static/paho-mqtt-min.js" charset="utf-8"></script>
     <script src="/static/code.js"></script>
   </body>

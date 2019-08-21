@@ -1,8 +1,5 @@
 "use strict"
 
-const host = prompt('Host')
-const login = prompt('Login');
-const passwd = prompt('Password');
 const userName = prompt('Nick name')
 const messagesLog = [];
 let client = null;
@@ -38,7 +35,7 @@ function appInit() {
     //client.onConnected = () => console.log('cool!');
     client.connect({
         userName: login,
-        password : passwd,
+        password : password,
         hosts : [host],
         ports : [9001],
         reconnect: true,
