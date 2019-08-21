@@ -381,20 +381,20 @@ h1{font-size:138.5%;}h2{font-size:123.1%;}h3{font-size:108%;}h1,h2,h3{margin:1em
     <div id="doc3" class="yui-t1">
       <div id="hd">
         <h1>Tchôt! </h1>
-      </div>
-      <div id="bd">
-        <div id="yui-main">
-          <div class="yui-b">
-            <div class="yui-gf">
-              <div class="yui-u first" id="all_nicks" onclick="userListClicked(this)">
-              </div>                                                                                                                                                
-              <div class="yui-u" id="all_texts">
-                <p>Chat log here:</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="yui-b" id="all_channels" onclick="channelListClicked(this)"></div>
+        <table style="width: 100%" border="1">
+          <tbody>
+            <tr>
+              <td style="width: 109px;" id="all_channels"><br>
+              </td>
+              <td style="margin-left: 0px; width: 125px;" id="all_nicks"><br>
+              </td>
+              <td id="all_texts"><br>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p><br>
+        </p>
       </div>
       <div id="ft"> <input id="input_text" name="user_text" placeholder="Type your text here and press ENTER"
           autocomplete="off" type="text"> </div>

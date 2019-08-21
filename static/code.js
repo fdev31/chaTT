@@ -74,7 +74,6 @@ function appInit() {
     document.getElementById('input_text').focus();
 }
 
-
 function channelListClicked(item) {
     activeSession.currentChannel = item.childNodes[0].data;
 }
