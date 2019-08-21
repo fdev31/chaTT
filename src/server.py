@@ -69,7 +69,7 @@ def static_files(name):
 @bottle.get('/')
 def index():
     known_users = list(KNOWN_USERS)
-    known_rooms = list(KNOWN_USERS)
+    known_rooms = list(KNOWN_ROOMS)
     return template('./templates/index.html',
             user=USER,
             host=HOST,
