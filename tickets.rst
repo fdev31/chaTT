@@ -1,7 +1,7 @@
 Tickets
 =======
 
-:total-count: 3
+:total-count: 4
 
 --------------------------------------------------------------------------------
 
@@ -41,3 +41,14 @@ Inject host, login & password via the template instead of using prompt() in JS
 :bugid: 3
 :created: 2019-08-21T19:46:12
 :priority: 0
+
+--------------------------------------------------------------------------------
+
+optimize the DOM refreshing
+===========================
+
+:bugid: 4
+:created: 2019-08-21T23:57:33
+:priority: 0
+
+innerHTML recomputing everything vs delta ?
