@@ -54,6 +54,8 @@ function appInit() {
 
     var rms = document.getElementById("rooms");
     rms.innerHTML = Array.from(rooms).join('</br>')
+    var usr = document.getElementById("users");
+    usr.innerHTML = Array.from(users).join('</br>')
 
     document.getElementById('input_text').focus();
 }
