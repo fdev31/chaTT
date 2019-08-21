@@ -40,7 +40,6 @@ function appInit() {
         ports : [9001],
         reconnect: false,
         onSuccess: () => {
-            console.log("erreur");
             client.subscribe("rooms/#", {
                 onFailure: (...args) => {console.log("Error subscribing:", args)}
             });
