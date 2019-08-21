@@ -14,9 +14,9 @@ import os
 import sys
 import getpass
 
-HOST = input('host (mqtt.myhost.com): ').strip()
-USER = input('login: ').strip()
-PASS = getpass.getpass('password: ').strip()
+HOST = os.getenv('HOST') or input('host (mqtt.myhost.com): ').strip()
+USER = os.getenv('USER') or input('login: ').strip()
+PASS = os.getenv('PASS') or getpass.getpass('password: ').strip()
 
 import bottle
 from bottle import route, run, template
