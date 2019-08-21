@@ -5,11 +5,11 @@ const messagesLog = [];
 let client = null;
 
 function drawRooms() {
-    var rms = document.getElementById("rooms");
+    var rms = document.getElementById("all_channels");
     rms.innerHTML = Array.from(rooms).join('</br>')
 }
 function drawUsers() {
-    var usr = document.getElementById("users");
+    var usr = document.getElementById("all_nicks");
     usr.innerHTML = Array.from(users).join('</br>')
 }
 
@@ -28,6 +28,25 @@ function sendText(keypress) {
     }
 }
 
+function messageArrived(msg) {
+    if (msg.topic == 'rooms/main/newtext') {
+        const payload = JSON.parse(msg.payloadString);
+        const old_size = users.size;
+        users.add(payload.author);
+        if (old_size < users.size) {
+            drawUsers();
+        }
+        messagesLog.push(`<b>${payload.author}</b>: ${payload.text}`);
+        showMessages();
+    } else if (msg.topic.match(/^rooms/)) {
+        const old_size = rooms.size;
+        rooms.add(msg.topic.split('/')[1]);
+        if (old_size < rooms.size) {
+            drawRooms();
+        }
+    }
+}
+
 function appInit() {
     // install ENTER handler for the input
     document.getElementById('input_text').addEventListener('keydown', sendText);
@@ -36,24 +55,9 @@ function appInit() {
     client = new Paho.MQTT.Client(host, 9001, "/", "jsClient"+((Math.random()*100)&100));
     client.onMessageArrived = (msg) => {
         try {
-            if (msg.topic == 'rooms/main/newtext') {
-                const payload = JSON.parse(msg.payloadString);
-                const old_size = users.size;
-                users.add(payload.author);
-                if (old_size < users.size) {
-                    drawUsers();
-                }
-                messagesLog.push(`<b>${payload.author}</b>: ${payload.text}`);
-                showMessages();
-            } else if (msg.topic.match(/^rooms/)) {
-                const old_size = rooms.size;
-                rooms.add(msg.topic.split('/')[1]);
-                if (old_size < rooms.size) {
-                    drawRooms();
-                }
-            }
-        } catch {
-            console.log("Error", msg)
+            messageArrived(msg);
+        } catch (e) {
+            console.log("Error", msg, e)
         }
     }
     //client.onConnected = () => console.log('cool!');
