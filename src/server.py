@@ -70,8 +70,6 @@ def static_files(name):
 def index():
     known_users = list(KNOWN_USERS)
     known_rooms = list(KNOWN_USERS)
-    known_users.sort()
-    known_rooms.sort()
     return template('./templates/index.html',
             user=USER,
             host=HOST,
