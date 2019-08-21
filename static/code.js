@@ -49,4 +49,5 @@ function appInit() {
         onFailure: () => alert('Failed :(')
     });
 
+    document.getElementById('input_text').focus();
 }
