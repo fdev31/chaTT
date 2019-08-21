@@ -68,7 +68,17 @@ def static_files(name):
 
 @bottle.get('/')
 def index():
-    return template('./templates/index.html', user=USER, host=HOST, password=PASS)
+    known_users = list(KNOWN_USERS)
+    known_rooms = list(KNOWN_USERS)
+    known_users.sort()
+    known_rooms.sort()
+    return template('./templates/index.html',
+            user=USER,
+            host=HOST,
+            password=PASS,
+            all_users=json.dumps(known_users),
+            all_rooms=json.dumps(known_rooms),
+            )
 
 mqtt_runner = init_mqtt()
 
