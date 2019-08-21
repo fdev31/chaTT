@@ -5,7 +5,7 @@ const messagesLog = [];
 let client = null;
 
 function showMessages() {
-    const elt = document.getElementById('all_texts'); 
+    const elt = document.getElementById('all_texts');
     elt.innerHTML = messagesLog.join('<br/>');
     elt.scrollTop = elt.scrollHeight;
 }
@@ -38,8 +38,9 @@ function appInit() {
         password : password,
         hosts : [host],
         ports : [9001],
-        reconnect: true,
+        reconnect: false,
         onSuccess: () => {
+            console.log("erreur");
             client.subscribe("rooms/#", {
                 onFailure: (...args) => {console.log("Error subscribing:", args)}
             });
