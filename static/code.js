@@ -35,21 +35,25 @@ function appInit() {
     // setup the Mqtt client
     client = new Paho.MQTT.Client(host, 9001, "/", "jsClient"+((Math.random()*100)&100));
     client.onMessageArrived = (msg) => {
-        if (msg.topic == 'rooms/main/newtext') {
-            const payload = JSON.parse(msg.payloadString);
-            const old_size = users.size;
-            users.add(payload.author);
-            if (old_size < users.size) {
-                drawUsers();
+        try {
+            if (msg.topic == 'rooms/main/newtext') {
+                const payload = JSON.parse(msg.payloadString);
+                const old_size = users.size;
+                users.add(payload.author);
+                if (old_size < users.size) {
+                    drawUsers();
+                }
+                messagesLog.push(`<b>${payload.author}</b>: ${payload.text}`);
+                showMessages();
+            } else if (msg.topic.match(/^rooms/)) {
+                const old_size = rooms.size;
+                rooms.add(msg.topic.split('/')[1]);
+                if (old_size < rooms.size) {
+                    drawRooms();
+                }
             }
-            messagesLog.push(`<b>${payload.author}</b>: ${payload.text}`);
-            showMessages();
-        } else if (msg.topic.match(/^rooms/)) {
-            const old_size = rooms.size;
-            rooms.add(msg.topic.split('/')[1]);
-            if (old_size < rooms.size) {
-                drawRooms();
-            }
+        } catch {
+            console.log("Error", msg)
         }
     }
     //client.onConnected = () => console.log('cool!');
