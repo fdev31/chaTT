@@ -1,4 +1,4 @@
-"use strict";
+"use strict"
 
 const host = prompt('Host')
 const login = prompt('Login');
