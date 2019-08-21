@@ -2,6 +2,7 @@
 
 const userName = prompt('Nick name')
 const messagesLog = [];
+const maxMessages = 50;
 let client = null;
 
 const activeSession = {
@@ -39,6 +40,9 @@ function messageArrived(topic, msg) {
         users.add(payload.author);
         if (old_size < users.size) {
             drawUsers();
+        }
+        if (messagesLog.length >= maxMessages) { // truncate log
+            messagesLog.splice(0, 1);
         }
         messagesLog.push(`<b>${payload.author}</b>: ${payload.text}`);
         showMessages();
