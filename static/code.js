@@ -49,5 +49,8 @@ function appInit() {
         onFailure: () => alert('Failed :(')
     });
 
+    var rms = document.getElementById("rooms");
+    rms.innerHTML = Array.from(rooms).join('</br>')
+
     document.getElementById('input_text').focus();
 }
