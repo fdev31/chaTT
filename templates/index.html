@@ -362,6 +362,9 @@ body {
 #all_texts {
    overflow-y:auto;
 }
+#all_nicks, #all_channels {
+    cursor: pointer;
+}
 
 </style><style type="text/css">/*
 Copyright (c) 2008, Yahoo! Inc. All rights reserved.
@@ -383,7 +386,7 @@ h1{font-size:138.5%;}h2{font-size:123.1%;}h3{font-size:108%;}h1,h2,h3{margin:1em
         <div id="yui-main">
           <div class="yui-b">
             <div class="yui-gf">
-              <div class="yui-u first" id="all_nicks">
+              <div class="yui-u first" id="all_nicks" onclick="userListClicked(this)">
               </div>                                                                                                                                                
               <div class="yui-u" id="all_texts">
                 <p>Chat log here:</p>
@@ -391,7 +394,7 @@ h1{font-size:138.5%;}h2{font-size:123.1%;}h3{font-size:108%;}h1,h2,h3{margin:1em
             </div>
           </div>
         </div>
-        <div class="yui-b" id="all_channels"></div>
+        <div class="yui-b" id="all_channels" onclick="channelListClicked(this)"></div>
       </div>
       <div id="ft"> <input id="input_text" name="user_text" placeholder="Type your text here and press ENTER"
           autocomplete="off" type="text"> </div>

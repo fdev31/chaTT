@@ -55,6 +55,8 @@ function messageArrived(topic, msg) {
     }
 }
 
+// DOM callbacks
+
 function appInit() {
     // install ENTER handler for the input
     document.getElementById('input_text').addEventListener('keydown', sendText);
@@ -70,4 +72,13 @@ function appInit() {
     drawRooms();
     drawUsers();
     document.getElementById('input_text').focus();
+}
+
+
+function channelListClicked(item) {
+    activeSession.currentChannel = item.childNodes[0].data;
+}
+
+function userListClicked(item) {
+    console.log(item.childNodes[0].data);
 }
