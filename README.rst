@@ -6,6 +6,8 @@ ChaTT
 Quickstart
 ##########
 
+`Download the project <https://github.com/fdev31/chaTT/archive/master.zip>`_, uncompress it and open a shell inside the extracted folder.
+
 Try this installation method::
 
    python -m venv /tmp/foo
