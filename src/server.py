@@ -12,16 +12,18 @@ TOPIC="rooms/#"
 
 import os
 import sys
+import json
+import random
 import getpass
 
+# TODO: config file
 HOST = os.getenv('HOST') or input('host (mqtt.myhost.com): ').strip()
 USER = os.getenv('USER') or input('login: ').strip()
 PASS = os.getenv('PASS') or getpass.getpass('password: ').strip()
+MAX_HISTORY = 1000
 
 import bottle
 from bottle import route, run, template
-import json
-
 import paho.mqtt.client as mqtt
 
 STATIC_FILES_PATH = os.path.join(os.path.abspath(os.path.curdir), 'static')
@@ -29,10 +31,21 @@ assert( os.path.exists('README.rst') )
 
 KNOWN_ROOMS = set()
 KNOWN_USERS = set()
+RECORDED_MESSAGES = {}
 
 DEBUG = os.getenv('DEBUG')
 
 def init_mqtt():
+
+    def handle_newtext(room, payload):
+        # keep track of the activity
+        if room not in RECORDED_MESSAGES:
+            RECORDED_MESSAGES[room] = []
+        msgs = RECORDED_MESSAGES[room]
+        msgs.append(payload)
+        if len(msgs) > MAX_HISTORY:
+            msgs.pop(0)
+        KNOWN_USERS.add(payload['author'])
 
     def on_message(client, userdata, message):
         if message.topic.startswith('rooms'):
@@ -40,8 +53,7 @@ def init_mqtt():
             KNOWN_ROOMS.add(room)
             if action == 'newtext':
                 payload = json.loads(message.payload.decode("utf-8"))
-                KNOWN_USERS.add(payload['author'])
-
+                handle_newtext(room, payload)
 
         if DEBUG:
             print("message received " ,str(message.payload.decode("utf-8")))
@@ -49,7 +61,7 @@ def init_mqtt():
             print("message qos=",message.qos)
             print("message retain flag=",message.retain)
 
-    client = mqtt.Client("pyClient", transport=PROTO) #create new instance
+    client = mqtt.Client("pyClient-%d"%random.randint(0, 9999), transport=PROTO) #create new instance
 
     client.on_message = on_message
     client.username_pw_set(USER, PASS)
