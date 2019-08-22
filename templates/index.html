@@ -3,6 +3,8 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>ChaTT</title>
+    <script src="/static/mqtt.min.js" charset="utf-8"></script>
+    <script src="/static/code.js"></script>
     <style type="text/css">
 html {
   color: black;
@@ -376,7 +378,7 @@ body {
    overflow-y:auto;
    max-height: 60ex;
 }
-#all_nicks, #all_channels {
+#all_nicks, #all_rooms {
    cursor: pointer;
    overflow-y:auto;
    max-height: 60ex;
@@ -404,13 +406,18 @@ h1{font-size:138.5%;}h2{font-size:123.1%;}h3{font-size:108%;}h1,h2,h3{margin:1em
       <div id="hd">
         <h1>Tchôt! </h1>
         <div class="mainframe" style="width: 100%">
-            <div style="width: 100px; float: left;" id="all_channels" onclick="channelListClicked(this)"></div>
-            <div style="margin-left: 0px; width: 100px; float: left;" id="all_nicks" onclick="userListClicked(this)"></div>
+            <div style="width: 100px; float: left;" id="all_rooms" onclick="roomListClicked(this)"></div>
+            <div style="margin-left: 0px; width: 100px; float: left;" id="all_nicks"></div>
             <div id="all_texts"></div>
         </div>
       </div>
       <div id="ft"> <input id="input_text" name="user_text" placeholder="Type your text here and press ENTER"
           autocomplete="off" type="text"> </div>
+      <div>
+          <p>
+          <button onclick="createroom()">New room</button>
+          </p>
+      </div>
     </div>
     <script>
         const login="{{user}}";
@@ -419,7 +426,5 @@ h1{font-size:138.5%;}h2{font-size:123.1%;}h3{font-size:108%;}h1,h2,h3{margin:1em
         const rooms=new Set({{!all_rooms}});
         const users=new Set({{!all_users}});
     </script>
-    <script src="/static/mqtt.min.js" charset="utf-8"></script>
-    <script src="/static/code.js"></script>
   </body>
 </html>
