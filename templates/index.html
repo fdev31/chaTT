@@ -19,6 +19,16 @@ table {
   border-spacing: 0px;
 }
 
+table.maintable {
+  border: none;
+  max-height: 40em;
+}
+
+tr > td {
+    border: none;
+    border-left: solid 2px;
+}
+
 fieldset, img {
   border: 0px none;
 }
@@ -242,7 +252,6 @@ body {
 
 .yui-ge div.first, .yui-gf .yui-u {
   width: calc(100% - 100px);
-  max-height: 40em;
 }
 
 .yui-ge .yui-u, .yui-gf div.first {
@@ -356,15 +365,28 @@ body {
 #bd, .yui-g, .yui-gb, .yui-gc, .yui-gd, .yui-ge, .yui-gf {
 }
 
+#mainframe {
+    max-height: 50ex;
+}
+
 #input_text {
   width: 98%;
 }
 #all_texts {
    overflow-y:auto;
+   max-height: 60ex;
 }
 #all_nicks, #all_channels {
-    cursor: pointer;
+   cursor: pointer;
+   overflow-y:auto;
+   max-height: 60ex;
 }
+
+#all_nicks, #all_texts {
+    border-left: solid 2px #676767;
+    padding-left: 5px;
+}
+
 
 </style><style type="text/css">/*
 Copyright (c) 2008, Yahoo! Inc. All rights reserved.
@@ -381,20 +403,11 @@ h1{font-size:138.5%;}h2{font-size:123.1%;}h3{font-size:108%;}h1,h2,h3{margin:1em
     <div id="doc3" class="yui-t1">
       <div id="hd">
         <h1>Tchôt! </h1>
-        <table style="width: 100%" border="1">
-          <tbody>
-            <tr>
-              <td style="width: 109px;" id="all_channels"><br>
-              </td>
-              <td style="margin-left: 0px; width: 125px;" id="all_nicks"><br>
-              </td>
-              <td id="all_texts"><br>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <p><br>
-        </p>
+        <div class="mainframe" style="width: 100%">
+            <div style="width: 100px; float: left;" id="all_channels" onclick="channelListClicked(this)"></div>
+            <div style="margin-left: 0px; width: 100px; float: left;" id="all_nicks" onclick="userListClicked(this)"></div>
+            <div id="all_texts"></div>
+        </div>
       </div>
       <div id="ft"> <input id="input_text" name="user_text" placeholder="Type your text here and press ENTER"
           autocomplete="off" type="text"> </div>

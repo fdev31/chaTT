@@ -76,8 +76,10 @@ function appInit() {
 
 function channelListClicked(item) {
     activeSession.currentChannel = item.childNodes[0].data;
+    console.log(item.childNodes[0].data);
 }
 
 function userListClicked(item) {
+    document.getElementById('input_text').value += item.childNodes[0].data;
     console.log(item.childNodes[0].data);
 }
