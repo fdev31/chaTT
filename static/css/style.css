@@ -1,0 +1,396 @@
+html {
+  color: black;
+  background: white url("/static/background.jpg") no-repeat fixed 0% 0%;
+}
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
+  margin: 0px;
+  padding: 0px;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0px;
+}
+
+div.roomName {
+    color: #000;
+}
+
+div.roomName:hover {
+    color: #227;
+}
+div.roomName.selected {
+    font-weight: bold;
+}
+
+table.maintable {
+  border: none;
+  max-height: 40em;
+}
+
+tr > td {
+    border: none;
+    border-left: solid 2px;
+}
+
+fieldset, img {
+  border: 0px none;
+}
+
+address, caption, cite, code, dfn, em, strong, th, var {
+  font-style: normal;
+  font-weight: normal;
+}
+
+li {
+  list-style: outside none none;
+}
+
+caption, th {
+  text-align: left;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+
+q::before, q::after {
+  content: "";
+}
+
+abbr, acronym {
+  border: 0px none;
+  font-variant: normal;
+}
+
+sup {
+  vertical-align: text-top;
+}
+
+sub {
+  vertical-align: text-bottom;
+}
+
+input, textarea, select {
+}
+
+input, textarea, select {
+}
+
+legend {
+  color: black;
+}
+
+del, ins {
+  text-decoration: none;
+}
+
+body {
+  font: 13px / 1.231 arial helvetica clean sans-serif;
+}
+
+select, input, button, textarea {
+  font: 99% arial helvetica clean sans-serif;
+}
+
+table {
+}
+
+pre, code, kbd, samp, tt {
+  font-family: monospace;
+  line-height: 100%;
+}
+
+body {
+  text-align: center;
+}
+
+#ft {
+  clear: both;
+}
+
+#doc, #doc2, #doc3, #doc4, .yui-t1, .yui-t2, .yui-t3, .yui-t4, .yui-t5, .yui-t6, .yui-t7 {
+  margin: auto;
+  text-align: left;
+  width: 57.69em;
+  min-width: 750px;
+}
+
+#doc2 {
+  width: 73.076em;
+}
+
+#doc3 {
+  margin: auto 10px;
+  width: auto;
+}
+
+#doc4 {
+  width: 74.923em;
+}
+
+.yui-b {
+  position: relative;
+}
+
+.yui-b {
+}
+
+#yui-main .yui-b {
+  position: static;
+}
+
+#yui-main, .yui-g .yui-u .yui-g {
+  width: 100%;
+}
+
+.yui-t1 #yui-main, .yui-t2 #yui-main, .yui-t3 #yui-main {
+  float: right;
+  margin-left: -25em;
+  background-color: rgba(255, 255, 255, 0.75);
+  border-radius: 0 20px;
+  padding: 1em 0;
+}
+
+.yui-t4 #yui-main, .yui-t5 #yui-main, .yui-t6 #yui-main {
+  float: left;
+  margin-right: -25em;
+}
+
+.yui-t1 .yui-b {
+  float: left;
+  width: 12.3077em;
+}
+
+.yui-t1 #yui-main .yui-b {
+  margin-left: 13.3077em;
+}
+
+.yui-t2 .yui-b {
+  float: left;
+  width: 13.8461em;
+}
+
+.yui-t2 #yui-main .yui-b {
+  margin-left: 14.8461em;
+}
+
+.yui-t3 .yui-b {
+  float: left;
+  width: 23.0769em;
+}
+
+.yui-t3 #yui-main .yui-b {
+  margin-left: 24.0769em;
+}
+
+.yui-t4 .yui-b {
+  float: right;
+  width: 13.8456em;
+}
+
+.yui-t4 #yui-main .yui-b {
+  margin-right: 14.8456em;
+}
+
+.yui-t5 .yui-b {
+  float: right;
+  width: 18.4615em;
+}
+
+.yui-t5 #yui-main .yui-b {
+  margin-right: 19.4615em;
+}
+
+.yui-t6 .yui-b {
+  float: right;
+  width: 23.0769em;
+}
+
+.yui-t6 #yui-main .yui-b {
+  margin-right: 24.0769em;
+}
+
+.yui-t7 #yui-main .yui-b {
+  display: block;
+  margin: 0px 0px 1em;
+}
+
+#yui-main .yui-b {
+  float: none;
+  width: auto;
+}
+
+.yui-gb .yui-u, .yui-g .yui-gb .yui-u, .yui-gb .yui-g, .yui-gb .yui-gb, .yui-gb .yui-gc, .yui-gb .yui-gd, .yui-gb .yui-ge, .yui-gb .yui-gf, .yui-gc .yui-u, .yui-gc .yui-g, .yui-gd .yui-u {
+  float: left;
+}
+
+.yui-g .yui-u, .yui-g .yui-g, .yui-g .yui-gb, .yui-g .yui-gc, .yui-g .yui-gd, .yui-g .yui-ge, .yui-g .yui-gf, .yui-gc .yui-u, .yui-gd .yui-g, .yui-g .yui-gc .yui-u, .yui-ge .yui-u, .yui-ge .yui-g, .yui-gf .yui-g, .yui-gf .yui-u {
+  float: right;
+}
+
+.yui-g div.first, .yui-gb div.first, .yui-gc div.first, .yui-gd div.first, .yui-ge div.first, .yui-gf div.first, .yui-g .yui-gc div.first, .yui-g .yui-ge div.first, .yui-gc div.first div.first {
+  float: left;
+}
+
+.yui-g .yui-u, .yui-g .yui-g, .yui-g .yui-gb, .yui-g .yui-gc, .yui-g .yui-gd, .yui-g .yui-ge, .yui-g .yui-gf {
+  width: 49.1%;
+}
+
+.yui-gb .yui-u, .yui-g .yui-gb .yui-u, .yui-gb .yui-g, .yui-gb .yui-gb, .yui-gb .yui-gc, .yui-gb .yui-gd, .yui-gb .yui-ge, .yui-gb .yui-gf, .yui-gc .yui-u, .yui-gc .yui-g, .yui-gd .yui-u {
+  width: 32%;
+  margin-left: 1.99%;
+}
+
+.yui-gb .yui-u {
+}
+
+.yui-gc div.first, .yui-gd .yui-u {
+  width: 66%;
+}
+
+.yui-gd div.first {
+  width: 32%;
+}
+
+.yui-ge div.first, .yui-gf .yui-u {
+  width: calc(100% - 100px);
+}
+
+.yui-ge .yui-u, .yui-gf div.first {
+  width: 100px;
+}
+
+.yui-g .yui-gb div.first, .yui-gb div.first, .yui-gc div.first, .yui-gd div.first {
+  margin-left: 0px;
+}
+
+.yui-g .yui-g .yui-u, .yui-gb .yui-g .yui-u, .yui-gc .yui-g .yui-u, .yui-gd .yui-g .yui-u, .yui-ge .yui-g .yui-u, .yui-gf .yui-g .yui-u {
+  width: 49%;
+}
+
+.yui-g .yui-g .yui-u {
+  width: 48.1%;
+}
+
+.yui-g .yui-gb div.first, .yui-gb .yui-gb div.first {
+}
+
+.yui-g .yui-gc div.first, .yui-gd .yui-g {
+  width: 66%;
+}
+
+.yui-gb .yui-g div.first {
+}
+
+.yui-gb .yui-gc div.first, .yui-gb .yui-gd div.first {
+}
+
+.yui-gb .yui-gb .yui-u, .yui-gb .yui-gc .yui-u {
+}
+
+.yui-g .yui-gb .yui-u {
+}
+
+.yui-gb .yui-gd .yui-u {
+}
+
+.yui-gb .yui-gd div.first {
+}
+
+.yui-g .yui-gc .yui-u, .yui-gb .yui-gc .yui-u {
+  width: 32%;
+  margin-right: 0px;
+}
+
+.yui-gb .yui-gc div.first {
+  width: 66%;
+}
+
+.yui-gb .yui-ge .yui-u, .yui-gb .yui-gf .yui-u {
+  margin: 0px;
+}
+
+.yui-gb .yui-gb .yui-u {
+}
+
+.yui-gb .yui-g div.first, .yui-gb .yui-gb div.first {
+}
+
+.yui-gc .yui-g .yui-u, .yui-gd .yui-g .yui-u {
+}
+
+.yui-gb .yui-gd div.first {
+  width: 32%;
+}
+
+.yui-g .yui-gd div.first {
+}
+
+.yui-ge .yui-g {
+  width: 24%;
+}
+
+.yui-gf .yui-g {
+  width: 74.2%;
+}
+
+.yui-gb .yui-ge div.yui-u, .yui-gb .yui-gf div.yui-u {
+  float: right;
+}
+
+.yui-gb .yui-ge div.first, .yui-gb .yui-gf div.first {
+  float: left;
+}
+
+.yui-gb .yui-ge .yui-u, .yui-gb .yui-gf div.first {
+}
+
+.yui-gb .yui-ge div.first, .yui-gb .yui-gf .yui-u {
+}
+
+.yui-ge div.first .yui-gd .yui-u {
+  width: 65%;
+}
+
+.yui-ge div.first .yui-gd div.first {
+  width: 32%;
+}
+
+#bd::after, .yui-g::after, .yui-gb::after, .yui-gc::after, .yui-gd::after, .yui-ge::after, .yui-gf::after {
+  content: ".";
+  display: block;
+  height: 0px;
+  clear: both;
+  visibility: hidden;
+}
+
+#bd, .yui-g, .yui-gb, .yui-gc, .yui-gd, .yui-ge, .yui-gf {
+}
+
+#mainframe {
+    max-height: 50ex;
+}
+
+#input_text {
+  width: 98%;
+}
+#all_texts {
+   overflow-y:auto;
+   max-height: 60ex;
+}
+#all_nicks, #all_rooms {
+   cursor: pointer;
+   overflow-y:auto;
+   max-height: 60ex;
+}
+
+#all_nicks, #all_texts {
+    border-left: solid 2px #676767;
+    padding-left: 5px;
+}
+
+
+h1{font-size:138.5%;}h2{font-size:123.1%;}h3{font-size:108%;}h1,h2,h3{margin:1em 0;}h1,h2,h3,h4,h5,h6,strong{font-weight:bold;}abbr,acronym{border-bottom:1px dotted #000;cursor:help;} em{font-style:italic;}blockquote,ul,ol,dl{margin:1em;}ol,ul,dl{margin-left:2em;}ol li{list-style:decimal outside;}ul li{list-style:disc outside;}dl dd{margin-left:1em;}th,td{border:1px solid #000;padding:.5em;}th{font-weight:bold;text-align:center;}caption{margin-bottom:.5em;text-align:center;}p,fieldset,table,pre{margin-bottom:1em;}input[type=text],input[type=password],textarea{width:12.25em;*width:11.9em;}

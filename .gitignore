@@ -20,6 +20,7 @@ parts/
 sdist/
 var/
 wheels/
+run2.sh
 *.egg-info/
 .installed.cfg
 *.egg
