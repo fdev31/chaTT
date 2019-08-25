@@ -12,17 +12,23 @@ const messagesLog = {
 };
 
 function focusInput() {
-    document.getElementById('input_text').focus();
+    dom.input.focus();
+}
+
+function _getRoomDiv(name) {
+    return dom.rooms.querySelector(`div[attr-room="${name}"]`);
 }
 
 function drawRooms() {
-    var rms = document.getElementById("all_rooms");
-    rms.innerHTML = Array.from(rooms)
-        .map( (name) => `<div onclick="roomListClicked(this)">${name}</div>`)
+    dom.rooms.innerHTML = Array.from(rooms)
+        .map( (name) => (`<div class="roomName" attr-room="${name}" onclick="roomListClicked(this)">${name}</div>`) )
         .join('');
+    const room = _getRoomDiv(activeSession.currentRoom);
+    room.classList.add('selected');
 }
+
 function drawUsers() {
-    var usr = document.getElementById("all_nicks");
+    const usr = document.getElementById("all_nicks");
 
     usr.innerHTML = Array.from(users)
         .map( (name) => `<div onclick="userListClicked(this)">${name}</div>`)
@@ -41,10 +47,10 @@ function publish(topic, payload, opts) {
 
 function sendText(keypress) {
     if (keypress.code == 'Enter') {
-        const text = document.getElementById('input_text').value;
+        const text = dom.input.value;
         const payload = JSON.stringify({'author': userName, 'text': text});
         publish(`rooms/${activeSession.currentRoom}/newtext`, payload, {qos: 1, retain: true});
-        document.getElementById('input_text').value = '';
+        dom.input.value = '';
     }
 }
 
@@ -85,10 +91,13 @@ function messageArrived(topic, msg) {
 }
 
 // DOM callbacks
+const dom = {}
 
 function appInit() {
     // install ENTER handler for the input
-    document.getElementById('input_text').addEventListener('keydown', sendText);
+    dom.rooms = document.getElementById("all_rooms");
+    dom.input = document.getElementById('input_text');
+    dom.input.addEventListener('keydown', sendText);
 
     // setup the Mqtt client
     client = new mqtt(`mqtt://${login}:${password}@${host}:9001`);
@@ -117,7 +126,7 @@ function roomListClicked(item) {
 }
 
 function userListClicked(item) {
-    document.getElementById('input_text').value += `@${item.childNodes[0].data}: `;
+    dom.input.value += `@${item.childNodes[0].data}: `;
     focusInput();
 }
 
