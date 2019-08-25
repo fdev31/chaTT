@@ -3,6 +3,16 @@ html {
   background: white url("/static/img/background.jpg") no-repeat fixed 0% 0%;
 }
 
+span.nick {
+  font-weight: bold;
+  margin-right: 1ex;
+  margin-left: 0.5ex;
+}
+
+span.text {
+  color: #333;
+}
+
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
   margin: 0px;
   padding: 0px;
