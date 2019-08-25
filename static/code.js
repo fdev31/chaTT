@@ -115,10 +115,13 @@ function appInit() {
 function roomListClicked(item) {
     let newRoom = item.textContent;
     if (activeSession.currentRoom != newRoom) {
+        const oldRoom = activeSession.currentRoom;
         activeSession.currentRoom = newRoom;
         if (messagesLog[newRoom] == undefined) {
             messagesLog[newRoom] = [];
         }
+        _getRoomDiv(oldRoom).classList.remove('selected');
+        _getRoomDiv(newRoom).classList.add('selected');
         drawMessages();
     }
     event.stopPropagation();
