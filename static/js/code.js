@@ -38,7 +38,7 @@ function drawUsers() {
 function drawMessages() {
     const elt = document.getElementById('all_texts');
     elt.innerHTML = messagesLog[activeSession.currentRoom]
-        .map( (message) => `<div class="textLine"><span class="nick">${message[0]}</span></span class="text">${message[1]}</span></div>`)
+        .map( (message) => `<div class="textLine"><span class="nick">${message[0]}</span><span class="text">${message[1]}</span></div>`)
         .join('<br/>');
     elt.scrollTop = elt.scrollHeight;
 }
