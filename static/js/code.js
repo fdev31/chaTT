@@ -37,7 +37,9 @@ function drawUsers() {
 
 function drawMessages() {
     const elt = document.getElementById('all_texts');
-    elt.innerHTML = messagesLog[activeSession.currentRoom].join('<br/>');
+    elt.innerHTML = messagesLog[activeSession.currentRoom]
+        .map( (message) => `<div class="textLine"><span class="nick">${message[0]}</span></span class="text">${message[1]}</span></div>`)
+        .join('<br/>');
     elt.scrollTop = elt.scrollHeight;
 }
 
@@ -82,7 +84,7 @@ function messageArrived(topic, msg) {
         if (messagesLog[room].length >= maxMessages) { // truncate log
             messagesLog[room].splice(0, 1);
         }
-        messagesLog[room].push(`<b>${payload.author}</b>: ${payload.text}`);
+        messagesLog[room].push([payload.author, payload.text]);
 
         if (room == activeSession.currentRoom) {
             drawMessages();
