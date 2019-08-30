@@ -35,10 +35,39 @@ function drawUsers() {
         .join('');
 }
 
+// Text rendering functions
+const commands = {};
+commands.img = (cmd, url) => `<img style="max-height: 2em" src="${url}"/>`;
+commands.http = (protocol, path) => {
+    const host = path.split('/')[0];
+    return `<a href="${protocol}://${path}">[${host}]</a>`;
+};
+commands.https = commands.http;
+
+const _genericCommandRe = ':([a-z]{2,10}):(?:[(](.*)[)])?';
+const _urlRe = '(https?)://([^   \n]+)';
+const commandsPattern = new RegExp(`(${_genericCommandRe})|(${_urlRe})`);
+
+function commandsProcessor(...args) {
+    // get the result of a regex math and return the matching command result
+    const params = args.filter( (el) => el );
+    // params = [group, group, subgroup1 (command), subgroup2 (parameters)]
+    const handler = commands[params[2]];
+    if (handler) {
+        return handler(...params.splice(2));
+    }
+    return `(?)${params[0]}(?)`;
+}
+
+function renderCommands(text) {
+    return text.replace(commandsPattern, commandsProcessor);
+}
+
 function drawMessages() {
     const elt = document.getElementById('all_texts');
     elt.innerHTML = messagesLog[activeSession.currentRoom]
         .map( (message) => `<div class="textLine"><span class="nick">${message[0]}</span><span class="text">${message[1]}</span></div>`)
+        .map( renderCommands )
         .join('');
     elt.scrollTop = elt.scrollHeight;
 }
