@@ -46,15 +46,15 @@ commands.https = commands.http;
 
 const _genericCommandRe = ':([a-z]{2,10}):(?:[(](.*)[)])?';
 const _urlRe = '(https?)://([^   \n]+)';
-const commandsPattern = new RegExp(`(${_genericCommandRe})|(${_urlRe})`);
+const commandsPattern = new RegExp(`(?:${_genericCommandRe})|(?:${_urlRe})`);
 
 function commandsProcessor(...args) {
     // get the result of a regex math and return the matching command result
     const params = args.filter( (el) => el );
-    // params = [group, group, subgroup1 (command), subgroup2 (parameters)]
-    const handler = commands[params[2]];
+    // params = [group, subgroup1 (command), subgroup2 (parameters)]
+    const handler = commands[params[1]];
     if (handler) {
-        return handler(...params.splice(2));
+        return handler(...params.splice(1));
     }
     return `(?)${params[0]}(?)`;
 }
