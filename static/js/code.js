@@ -49,7 +49,7 @@ const _urlRe = '(https?)://([^   \n]+)';
 const commandsPattern = new RegExp(`(?:${_genericCommandRe})|(?:${_urlRe})`);
 
 function commandsProcessor(...args) {
-    // get the result of a regex math and return the matching command result
+    // get the result of a regex match and return the matching command result
     const params = args.filter( (el) => el );
     // params = [group, subgroup1 (command), subgroup2 (parameters)]
     const handler = commands[params[1]];
@@ -90,10 +90,10 @@ function messageArrived(topic, msg) {
 
     if (parsed) {
         const room = parsed[1];
-        const old_size = rooms.size;
+        const oldSize = rooms.size;
         rooms.add(room);
 
-        if (old_size < rooms.size) {
+        if (oldSize < rooms.size) {
             drawRooms();
         }
 
@@ -101,9 +101,9 @@ function messageArrived(topic, msg) {
 
         if (parsed[2] == 'newtext') {
             // add new users if they speak
-            const old_size = users.size;
+            const oldSize = users.size;
             users.add(payload.author);
-            if (old_size < users.size) {
+            if (oldSize < users.size) {
                 drawUsers();
             }
         }
