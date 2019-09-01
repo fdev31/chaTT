@@ -124,6 +124,8 @@ function messageArrived(topic, msg) {
 
         if (oldSize < rooms.size) globEvents.emit('channelAdded');
 
+        if (msg.length == 0) return;
+
         const payload = JSON.parse(msg.toString());
 
         if (parsed[2] == 'newtext') {
@@ -213,6 +215,10 @@ function userListClicked(item) {
 
 function createRoom() {
     const roomName = prompt('Room name');
-    publish(`rooms/${roomName}/new`);
+    if (roomName.match(/#/)) {
+        alert('"#" is not allowed here!');
+        return;
+    }
+    publish(`rooms/${roomName.replace(/[+]/g, '&gt;')}/new`);
 }
 
