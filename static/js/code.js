@@ -2,6 +2,7 @@
 
 const userName = prompt('Nick name')
 const maxMessages = 50;
+
 let client = null;
 
 const activeSession = {
@@ -9,7 +10,21 @@ const activeSession = {
 }
 const messagesLog = {
     'main': []
-};
+}
+
+const globEvents = {
+    init: (name) => {
+        globEvents[name] = new Event(name);
+    },
+    emit: (name) => {
+        globEvents.elt.dispatchEvent(globEvents[name]);
+    },
+    on: (name, handler) => {
+        globEvents.elt.addEventListener(name, handler, false);
+    }
+}
+
+
 
 function focusInput() {
     dom.input.focus();
@@ -106,6 +121,7 @@ function messageArrived(topic, msg) {
             if (oldSize < users.size) {
                 drawUsers();
             }
+            globEvents.emit(payload.author != userName?'messageArrived':'messageEmitted', payload);
         }
 
         if (messagesLog[room] == undefined) messagesLog[room] = [];
@@ -133,14 +149,27 @@ function appInit() {
     // setup the Mqtt client
     client = new mqtt(`mqtt://${login}:${password}@${host}:9001`);
     client.on('connect', () => {
+        activeSession.bellSound = new Audio('/static/snd/bell.mp3');
+        activeSession.bellSound.volume = 0.0;
         client.subscribe("rooms/#", (err) => {err && console.log('Error', err)} );
         drawMessages();
         console.log('init finished.');
     });
+    globEvents.elt = document.getElementsByTagName('body')[0];
+    globEvents.init('messageArrived');
+    globEvents.init('messageEmitted');
     client.on('message', messageArrived);
     drawRooms();
     drawUsers();
     focusInput();
+}
+
+function enableAudio() {
+    if (activeSession.bellSound.volume == 0.0) {
+        activeSession.bellSound.volume = 1.0;
+        activeSession.bellSound.play();
+        globEvents.on('messageArrived', () => activeSession.bellSound.play());
+    }
 }
 
 function roomListClicked(item) {
