@@ -14,17 +14,23 @@ const messagesLog = {
 
 const globEvents = {
     init: (name) => {
-        globEvents[name] = new Event(name);
+        globEvents[name] = new Set();
     },
-    emit: (name) => {
-        globEvents.elt.dispatchEvent(globEvents[name]);
+    emit: (name, ...args) => {
+        for (const handler of globEvents[name]) {
+            try {
+                handler(...args);
+            } catch (e) {
+                console.error(`Emit ${name}: ${e}`);
+            }
+        }
     },
-    on: (name, handler) => {
-        globEvents.elt.addEventListener(name, handler, false);
+    on: (name_or_list, handler) => {
+        const nameList = typeof name_or_list == 'string' ? [name_or_list] : name_or_list;
+        for (const name of nameList)
+            globEvents[name].add(handler);
     }
 }
-
-
 
 function focusInput() {
     dom.input.focus();
@@ -108,9 +114,7 @@ function messageArrived(topic, msg) {
         const oldSize = rooms.size;
         rooms.add(room);
 
-        if (oldSize < rooms.size) {
-            drawRooms();
-        }
+        if (oldSize < rooms.size) globEvents.emit('channelAdded');
 
         const payload = JSON.parse(msg.toString());
 
@@ -118,23 +122,21 @@ function messageArrived(topic, msg) {
             // add new users if they speak
             const oldSize = users.size;
             users.add(payload.author);
-            if (oldSize < users.size) {
-                drawUsers();
-            }
-            globEvents.emit(payload.author != userName?'messageArrived':'messageEmitted', payload);
-        }
+            if (oldSize < users.size) globEvents.emit('userAdded');
 
-        if (messagesLog[room] == undefined) messagesLog[room] = [];
-
-        if (messagesLog[room].length >= maxMessages) { // truncate log
-            messagesLog[room].splice(0, 1);
-        }
-        messagesLog[room].push([payload.author, payload.text]);
-
-        if (room == activeSession.currentRoom) {
-            drawMessages();
+            _refreshMessageLog(room, payload);
+            globEvents.emit(payload.author != userName?'messageArrived':'messageEmitted', room, payload);
         }
     }
+}
+
+function _refreshMessageLog(room, payload) {
+    if (messagesLog[room] == undefined) messagesLog[room] = [];
+
+    if (messagesLog[room].length >= maxMessages) { // truncate log
+        messagesLog[room].splice(0, 1);
+    }
+    messagesLog[room].push([payload.author, payload.text]);
 }
 
 // DOM callbacks
@@ -146,6 +148,21 @@ function appInit() {
     dom.input = document.getElementById('input_text');
     dom.input.addEventListener('keydown', sendText);
 
+
+    globEvents.init('messageArrived');
+    globEvents.init('messageEmitted');
+    globEvents.init('userAdded');
+    globEvents.init('channelAdded');
+
+    // setup UI redraw
+    globEvents.on('userAdded', drawUsers);
+    globEvents.on('channelAdded', drawRooms);
+    globEvents.on(['messageArrived', 'messageEmitted'], (room, payload) => {if (room == activeSession.currentRoom) drawMessageLog()});
+
+    drawRooms();
+    drawUsers();
+    focusInput();
+
     // setup the Mqtt client
     client = new mqtt(`mqtt://${login}:${password}@${host}:9001`);
     client.on('connect', () => {
@@ -155,13 +172,7 @@ function appInit() {
         drawMessages();
         console.log('init finished.');
     });
-    globEvents.elt = document.getElementsByTagName('body')[0];
-    globEvents.init('messageArrived');
-    globEvents.init('messageEmitted');
     client.on('message', messageArrived);
-    drawRooms();
-    drawUsers();
-    focusInput();
 }
 
 function enableAudio() {
