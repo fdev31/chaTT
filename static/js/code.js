@@ -41,14 +41,22 @@ function _getRoomDiv(name) {
 }
 
 function drawRooms() {
+    if (rooms.size == 0) {
+        console.warn('No Rooms!');
+        return;
+    }
     dom.rooms.innerHTML = Array.from(rooms)
         .map( (name) => (`<div class="roomName" attr-room="${name}" onclick="roomListClicked(this)">${name}</div>`) )
         .join('');
     const room = _getRoomDiv(activeSession.currentRoom);
-    room.classList.add('selected');
+    if (room) room.classList.add('selected');
 }
 
 function drawUsers() {
+    if (users.size == 0) {
+        console.warn('No Users!');
+        return;
+    }
     const usr = document.getElementById("all_nicks");
 
     usr.innerHTML = Array.from(users)
@@ -157,11 +165,7 @@ function appInit() {
     // setup UI redraw
     globEvents.on('userAdded', drawUsers);
     globEvents.on('channelAdded', drawRooms);
-    globEvents.on(['messageArrived', 'messageEmitted'], (room, payload) => {if (room == activeSession.currentRoom) drawMessageLog()});
-
-    drawRooms();
-    drawUsers();
-    focusInput();
+    globEvents.on(['messageArrived', 'messageEmitted'], (room, payload) => {if (room == activeSession.currentRoom) drawMessages()});
 
     // setup the Mqtt client
     client = new mqtt(`mqtt://${login}:${password}@${host}:9001`);
@@ -171,6 +175,9 @@ function appInit() {
         client.subscribe("rooms/#", (err) => {err && console.log('Error', err)} );
         drawMessages();
         console.log('init finished.');
+        drawRooms();
+        drawUsers();
+        focusInput();
     });
     client.on('message', messageArrived);
 }

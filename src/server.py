@@ -1,7 +1,7 @@
 #!/bin/env python
 
 # config
-PROTO="tcp"# websockets or tcp
+PROTO="tcp" # websockets or tcp
 
 if PROTO == "websockets":
     PORT=9001
@@ -92,8 +92,13 @@ def index():
 
 mqtt_runner = init_mqtt()
 
-try:
-    run(host='localhost', port=8080)
-except Exception as e:
-    print("Terminated with error: %s"%e)
-    mqtt_runner.loop_stop()
+if __name__ == "__main__":
+    try:
+        print("start")
+        run(host='localhost', port=8080)
+    except Exception as e:
+        print("Terminated with error: %s"%e)
+        mqtt_runner.loop_stop()
+else:
+    application = bottle.app()
+
