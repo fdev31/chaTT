@@ -20,11 +20,21 @@ import debounce
 host_port = os.getenv('HOST') or input('Enter the HTTP host & port (eg: localhost:8080) ')
 HTTP_SERVER = 'http://%s/'%host_port
 
+DB_FILE='chatinfo.json'
+
 LATENCY = 0.4
 debouncer = debounce.Debouncer()
 
 authors = set()
 channels = set()
+
+if os.path.exists(DB_FILE):
+    obj = json.load(open(DB_FILE))
+    for name in obj['authors']:
+        authors.add(name)
+    for name in obj['rooms']:
+        channels.add(name)
+
 
 def publish_channels():
     requests.post(HTTP_SERVER + 'cmd/setChannels', json=list(channels))
@@ -50,9 +60,13 @@ def process_message(topic, message):
 if __name__ == '__main__':
     debouncer.start()
     try:
+        if channels: # repeat saved state even if no news from mqtt
+            debouncer.schedule(publish_users, LATENCY)
+            debouncer.schedule(publish_channels, LATENCY)
         for line in fileinput.input():
             topic, message = line.split(' ', 1)
             process_message(topic, message)
     except KeyboardInterrupt:
         debouncer.running = False
+        json.dump({'authors': list(authors), 'rooms': list(channels)}, open(DB_FILE, 'w'))
 
