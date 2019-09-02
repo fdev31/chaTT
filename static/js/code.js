@@ -215,8 +215,8 @@ function userListClicked(item) {
 
 function createRoom() {
     const roomName = prompt('Room name');
-    if (roomName.match(/#/)) {
-        alert('"#" is not allowed here!');
+    if (! roomName.match(/^[a-zA-Z0-9-]+$/)) {
+        alert('Invalid room name!');
         return;
     }
     publish(`rooms/${roomName.replace(/[+]/g, '&gt;')}/new`);
