@@ -61,12 +61,28 @@ function drawUsers() {
         .join('');
 }
 
+let _thumbnailMaxHeight;
+
+function thumbnailClicked(elt) {
+    if (!!elt['data-max-height']) {
+        elt.style['max-height'] = elt['data-max-height'];
+        elt.style['position'] = 'relative';
+        elt['data-max-height'] = undefined;
+    } else {
+        elt['data-max-height'] = elt.style['max-height'];
+        elt.style['max-height'] = '';
+        elt.style['position'] = 'absolute';
+        elt.style['left'] = '0';
+        elt.style['top'] = '0';
+    }
+}
+
 // Text rendering functions
 const commands = {};
-commands.img = (cmd, url) => `<img style="max-height: 2em" src="${url}"/>`;
+commands.img = (cmd, url) => `<img class="thumbnail" onclick="thumbnailClicked(this)" style="max-height: 2em" src="${url}"/>`;
 commands.http = (protocol, path) => {
     const host = path.split('/')[0];
-    return `<a href="${protocol}://${path}">[${host}]</a>`;
+    return `<a href="${protocol}://${path}">(link to ${host})</a>`;
 };
 commands.https = commands.http;
 

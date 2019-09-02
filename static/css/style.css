@@ -5,6 +5,10 @@ html {
   font-size: 150%;
 }
 
+.thumbnail {
+    transition-duration: 1s;
+}
+
 span.nick {
   font-weight: bold;
   margin-right: 1ex;
