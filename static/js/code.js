@@ -68,7 +68,9 @@ function thumbnailClicked(elt) {
         elt.style['max-height'] = elt['data-max-height'];
         elt.style['position'] = 'relative';
         elt['data-max-height'] = undefined;
+        elt.style['z-index'] = '0';
     } else {
+        elt.style['z-index'] = '2';
         elt['data-max-height'] = elt.style['max-height'];
         elt.style['max-height'] = '';
         elt.style['position'] = 'absolute';
