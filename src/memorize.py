@@ -7,17 +7,18 @@
 #    mosquitto_sub -L 'mqtt://login:pass@hostname:port/rooms/#' | ./memorize.py
 # (replace login, pass & hostname)
 
-import fileinput
+import os
 import json
 import time
+import fileinput
 import threading
 
 import requests
 
 import debounce
 
-host_port = input('Enter the HTTP host & port (eg: localhost:8080) ')
-HTTP_SERVER = 'http://localhost:8080/'
+host_port = os.getenv('HOST') or input('Enter the HTTP host & port (eg: localhost:8080) ')
+HTTP_SERVER = 'http://%s/'%host_port
 
 LATENCY = 0.4
 debouncer = debounce.Debouncer()
@@ -45,7 +46,6 @@ def process_message(topic, message):
             authors.add(obj['author'])
             if old_len < len(authors):
                 debouncer.schedule(publish_users, LATENCY)
-
 
 if __name__ == '__main__':
     debouncer.start()
