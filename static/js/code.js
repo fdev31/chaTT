@@ -158,6 +158,8 @@ function appInit() {
     dom.input = document.getElementById('input_text');
     dom.input.addEventListener('keydown', sendText);
 
+    drawRooms();
+    drawUsers();
 
     globEvents.init('messageArrived');
     globEvents.init('messageEmitted');
@@ -177,8 +179,6 @@ function appInit() {
         client.subscribe("rooms/#", (err) => {err && console.log('Error', err)} );
         drawMessages();
         console.log('init finished.');
-        drawRooms();
-        drawUsers();
         focusInput();
     });
     client.on('message', messageArrived);
