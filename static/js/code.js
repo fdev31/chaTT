@@ -1,11 +1,11 @@
 "use strict"
 
-const userName = prompt('Nick name')
 const maxMessages = 50;
 
 let client = null;
 
 const activeSession = {
+    userName: 'NoName',
     currentRoom: 'main'
 }
 const messagesLog = {
@@ -108,7 +108,7 @@ function publish(topic, payload, opts) {
 function sendText(keypress) {
     if (keypress.code == 'Enter') {
         const text = dom.input.value;
-        const payload = JSON.stringify({'author': userName, 'text': text});
+        const payload = JSON.stringify({'author': activeSession.userName, 'text': text});
         publish(`rooms/${activeSession.currentRoom}/newtext`, payload, {qos: 1, retain: true});
         dom.input.value = '';
     }
@@ -135,7 +135,7 @@ function messageArrived(topic, msg) {
             if (oldSize < users.size) globEvents.emit('userAdded');
 
             _refreshMessageLog(room, payload);
-            globEvents.emit(payload.author != userName?'messageArrived':'messageEmitted', room, payload);
+            globEvents.emit(payload.author != activeSession.userName?'messageArrived':'messageEmitted', room, payload);
         }
     }
 }
@@ -160,6 +160,8 @@ function appInit() {
 
     drawRooms();
     drawUsers();
+
+    activeSession.userName = prompt('Nick name');
 
     globEvents.init('messageArrived');
     globEvents.init('messageEmitted');
