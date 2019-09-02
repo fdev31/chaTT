@@ -1,3 +1,2 @@
-paho-mqtt==1.4.0
 bottle==0.12.17
 requests==2.22.0
