@@ -1,6 +1,6 @@
 html {
   color: black;
-  background: white url("/static/img/background.jpg") no-repeat fixed 0% 0%;
+  background-color: #a2a8b0;
 }
 
 span.nick {
