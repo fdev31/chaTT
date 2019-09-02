@@ -173,6 +173,7 @@ function appInit() {
 
     // setup the Mqtt client
     client = new mqtt(`mqtt://${login}:${password}@${host}:9001`);
+    client.on('error', (err) => console.log('err', err));
     client.on('connect', () => {
         activeSession.bellSound = new Audio('/static/snd/bell.mp3');
         activeSession.bellSound.volume = 0.0;
