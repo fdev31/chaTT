@@ -27,6 +27,7 @@ debouncer = debounce.Debouncer()
 
 authors = set()
 channels = set()
+messages = dict()
 
 if os.path.exists(DB_FILE):
     obj = json.load(open(DB_FILE))
@@ -34,6 +35,8 @@ if os.path.exists(DB_FILE):
         authors.add(name)
     for name in obj['rooms']:
         channels.add(name)
+    for room, log in obj['messages'].items():
+        messages[room] = log
 
 
 def publish_channels():
@@ -41,6 +44,9 @@ def publish_channels():
 
 def publish_users():
     requests.post(HTTP_SERVER + 'cmd/setAuthors', json=list(authors))
+
+def publish_text(room, log):
+    requests.post(HTTP_SERVER + 'cmd/setRoomMessages', json={'room': room, 'messages': log})
 
 def process_message(topic, message):
     if topic.startswith('rooms/'):
@@ -51,9 +57,14 @@ def process_message(topic, message):
         if old_len < len(channels):
             debouncer.schedule(publish_channels, LATENCY)
         if split_topic[2] == 'newtext':
+            if not channel in messages:
+                messages[channel] = []
+
             obj = json.loads(message)
             old_len = len(authors)
             authors.add(obj['author'])
+            messages[channel].append([obj['author'], obj['text']])
+            publish_text(channel, messages[channel])
             if old_len < len(authors):
                 debouncer.schedule(publish_users, LATENCY)
 
@@ -68,5 +79,5 @@ if __name__ == '__main__':
             process_message(topic, message)
     except KeyboardInterrupt:
         debouncer.running = False
-        json.dump({'authors': list(authors), 'rooms': list(channels)}, open(DB_FILE, 'w'))
+        json.dump({'messages': messages, 'authors': list(authors), 'rooms': list(channels)}, open(DB_FILE, 'w'))
 

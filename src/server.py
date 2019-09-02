@@ -18,8 +18,14 @@ assert( os.path.exists('README.rst') )
 
 KNOWN_ROOMS = set()
 KNOWN_USERS = set()
+MESSAGES = dict()
 
 # http routing
+
+@bottle.post('/cmd/setRoomMessages')
+def cb():
+    data = bottle.request.json
+    MESSAGES[data['room']] = data['messages']
 
 @bottle.post('/cmd/setChannels')
 def cb():
@@ -45,6 +51,7 @@ def index():
             password=PASS,
             all_users=json.dumps(known_users),
             all_rooms=json.dumps(known_rooms),
+            all_messages=json.dumps(MESSAGES),
             )
 
 if __name__ == "__main__":

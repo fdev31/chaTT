@@ -8,9 +8,6 @@ const activeSession = {
     userName: 'NoName',
     currentRoom: 'main'
 }
-const messagesLog = {
-    'main': []
-}
 
 const globEvents = {
     init: (name) => {
@@ -109,7 +106,7 @@ function sendText(keypress) {
     if (keypress.code == 'Enter') {
         const text = dom.input.value;
         const payload = JSON.stringify({'author': activeSession.userName, 'text': text});
-        publish(`rooms/${activeSession.currentRoom}/newtext`, payload, {qos: 1, retain: true});
+        publish(`rooms/${activeSession.currentRoom}/newtext`, payload, {qos: 1, retain: false});
         dom.input.value = '';
     }
 }
