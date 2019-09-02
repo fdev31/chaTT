@@ -71,9 +71,15 @@ def process_message(topic, message):
 if __name__ == '__main__':
     debouncer.start()
     try:
+        def publish_all_texts():
+            for channel in channels:
+                publish_text(channel, messages[channel])
+
         if channels: # repeat saved state even if no news from mqtt
             debouncer.schedule(publish_users, LATENCY)
             debouncer.schedule(publish_channels, LATENCY)
+            debouncer.schedule(publish_all_texts, LATENCY)
+
         for line in fileinput.input():
             topic, message = line.split(' ', 1)
             process_message(topic, message)
