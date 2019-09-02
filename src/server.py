@@ -21,6 +21,16 @@ KNOWN_USERS = set()
 
 # http routing
 
+@bottle.post('/cmd/setChannels')
+def cb():
+    for name in bottle.request.json:
+        KNOWN_ROOMS.add(name)
+
+@bottle.post('/cmd/setAuthors')
+def cb():
+    for name in bottle.request.json:
+        KNOWN_USERS.add(name)
+
 @bottle.get('/static/<name:path>')
 def static_files(name):
     return bottle.static_file(name, STATIC_FILES_PATH)
