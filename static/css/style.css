@@ -1,6 +1,7 @@
 html {
-  color: black;
+  color: white;
   background-color: #a2a8b0;
+  background: white url("/static/img/background.jpg") no-repeat fixed 0% 0%;
 }
 
 span.nick {
@@ -10,7 +11,7 @@ span.nick {
 }
 
 span.text {
-  color: #333;
+  color: #ddd;
 }
 
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
@@ -24,11 +25,11 @@ table {
 }
 
 div.roomName {
-    color: #000;
+    color: #fff;
 }
 
 div.roomName:hover {
-    color: #227;
+    color: #99b;
 }
 div.roomName.selected {
     font-weight: bold;
