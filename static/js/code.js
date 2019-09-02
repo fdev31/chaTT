@@ -57,7 +57,7 @@ function drawUsers() {
     const usr = document.getElementById("all_nicks");
 
     usr.innerHTML = Array.from(users)
-        .map( (name) => `<div onclick="userListClicked(this)">${name}</div>`)
+        .map( (name) => activeSession.userName==name?'':`<div onclick="userListClicked(this)">${name}</div>`)
         .join('');
 }
 
