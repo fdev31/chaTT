@@ -117,13 +117,13 @@ function drawMessages() {
 }
 
 function publish(topic, payload, opts) {
-    return client.publish(topic, payload, opts);
+    return client.publish(topic, payload?JSON.stringify(payload):payload, opts);
 }
 
 function sendText(keypress) {
     if (keypress.code == 'Enter') {
         const text = dom.input.value;
-        const payload = JSON.stringify({'author': activeSession.userName, 'text': text});
+        const payload = {'author': activeSession.userName, 'text': text};
         publish(`rooms/${activeSession.currentRoom}/newtext`, payload, {qos: 1, retain: false});
         dom.input.value = '';
     }
