@@ -54,22 +54,3 @@ Eg: if
 
             time.sleep(d)
 
-if __name__ == '__main__':
-    t = Debouncer()
-#     t.setDaemon(True)
-    t.start()
-
-    l = lambda: print("Test")
-
-    for n in range(10):
-        t.schedule(lambda: print("Autre test"), 0.21)
-        t.schedule(l, 0.2)
-        time.sleep(0.01)
-        t.schedule(l, 0.2)
-        time.sleep(0.1)
-        t.schedule(l, 0.2)
-        time.sleep(0.15)
-        t.schedule(l, 0.2)
-        time.sleep(1)
-        print("~~~")
-    t.running = False
