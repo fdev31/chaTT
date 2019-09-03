@@ -81,7 +81,7 @@ function thumbnailClicked(elt) {
 
 // Text rendering functions
 const commands = {};
-commands.img = (cmd, url) => `<img class="thumbnail" onclick="thumbnailClicked(this)" style="max-height: 2em" src="${url}"/>`;
+commands.img = (cmd, url) => `<img class="thumbnail" onclick="thumbnailClicked(this)" style="max-height: 1em" src="${url}"/>`;
 commands.http = (protocol, path) => {
     const host = path.split('/')[0];
     return `<a href="${protocol}://${path}">(link to ${host})</a>`;
