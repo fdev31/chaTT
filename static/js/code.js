@@ -192,12 +192,13 @@ function appInit() {
     client = new mqtt(`mqtt://${login}:${password}@${host}:9001`);
     client.on('error', (err) => console.log('err', err));
     client.on('connect', () => {
+        publish(`users/${activeSession.userName}/hello`, {'ipAddress': ipAddr});
         activeSession.bellSound = new Audio('/static/snd/bell.mp3');
         activeSession.bellSound.volume = 0.0;
         client.subscribe("rooms/#", (err) => {err && console.log('Error', err)} );
         drawMessages();
-        console.log('init finished.');
         focusInput();
+        console.log('init finished.');
     });
     client.on('message', messageArrived);
 }

@@ -22,6 +22,8 @@ MESSAGES = dict()
 
 # http routing
 
+# internal commands - should not be exposed out of localhost
+
 @bottle.post('/cmd/setRoomMessages')
 def cb():
     data = bottle.request.json
@@ -37,18 +39,25 @@ def cb():
     for name in bottle.request.json:
         KNOWN_USERS.add(name)
 
+# static files - should not be used,
+# use your http server static file capabilities instead
+
 @bottle.get('/static/<name:path>')
 def static_files(name):
     return bottle.static_file(name, STATIC_FILES_PATH)
+
+# main template, includes current data
 
 @bottle.get('/')
 def index():
     known_users = list(KNOWN_USERS)
     known_rooms = list(KNOWN_ROOMS)
+    ip_addr = bottle.request.environ.get('HTTP_X_FORWARDED_FOR', '')
     return template('./templates/index.html',
             user=USER,
             host=HOST,
             password=PASS,
+            ip_addr=ip_addr,
             all_users=json.dumps(known_users),
             all_rooms=json.dumps(known_rooms),
             all_messages=json.dumps(MESSAGES),

@@ -12,6 +12,7 @@ import json
 import time
 import fileinput
 import threading
+import subprocess
 
 import requests
 
@@ -38,6 +39,8 @@ if os.path.exists(DB_FILE):
     for room, log in obj['messages'].items():
         messages[room] = log
 
+def mqtt_pub(topic, payload):
+    subprocess.call(['mosquitto_pub', '-L', 'mqtt://pifou:plop@localhost:1883/'+topic, '-m', json.dumps(payload)])
 
 def publish_channels():
     requests.post(HTTP_SERVER + 'cmd/setChannels', json=list(channels))
@@ -48,9 +51,14 @@ def publish_users():
 def publish_text(room, log):
     requests.post(HTTP_SERVER + 'cmd/setRoomMessages', json={'room': room, 'messages': log})
 
+def publish_ipaddress(user, ip_address):
+    mqtt_pub('rooms/main/newtext', {'author': 'bot', 'text': 'Welcome %s @ %s'%(user, ip_address)})
+
 def process_message(topic, message):
-    if topic.startswith('rooms/'):
-        split_topic = topic.split('/')
+    split_topic = topic.split('/')
+    obj = json.loads(message)
+
+    if split_topic[0] == 'rooms':
         channel = split_topic[1]
         old_len = len(channels)
         channels.add(channel)
@@ -60,11 +68,17 @@ def process_message(topic, message):
             if not channel in messages:
                 messages[channel] = []
 
-            obj = json.loads(message)
             old_len = len(authors)
             authors.add(obj['author'])
             messages[channel].append([obj['author'], obj['text']])
             publish_text(channel, messages[channel])
+            if old_len < len(authors):
+                debouncer.schedule(publish_users, LATENCY)
+    elif split_topic[0] == 'users':
+        if split_topic[2] == 'hello':
+            publish_ipaddress(split_topic[1], obj['ipAddress'])
+            old_len = len(authors)
+            authors.add(split_topic[1])
             if old_len < len(authors):
                 debouncer.schedule(publish_users, LATENCY)
 
