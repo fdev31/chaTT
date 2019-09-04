@@ -21,6 +21,10 @@ import debounce
 host_port = os.getenv('HOST') or input('Enter the HTTP host & port (eg: localhost:8080) ')
 HTTP_SERVER = 'http://%s/'%host_port
 
+# for the localhost mqtt server
+login = os.getenv('USER') or input('Enter user: ')
+password = os.getenv('PASS') or input('Enter pass: ')
+
 DB_FILE='chatinfo.json'
 
 LATENCY = 0.4
@@ -40,7 +44,7 @@ if os.path.exists(DB_FILE):
         messages[room] = log
 
 def mqtt_pub(topic, payload):
-    subprocess.call(['mosquitto_pub', '-L', 'mqtt://pifou:plop@localhost:1883/'+topic, '-m', json.dumps(payload)])
+    subprocess.call(['mosquitto_pub', '-L', 'mqtt://'+login+':'+password+'@localhost:1883/'+topic, '-m', json.dumps(payload)])
 
 def publish_channels():
     requests.post(HTTP_SERVER + 'cmd/setChannels', json=list(channels))
