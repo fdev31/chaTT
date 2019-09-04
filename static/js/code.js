@@ -114,7 +114,7 @@ function commandsProcessor(...args) {
 function renderCommands(text) {
     text = text.replace(commandsPattern, commandsProcessor);
     for (let [re, name] of smileys) {
-        text = text.replace(re, `<img class="thumbnail" src="static/img/emoticons/${name}.svg" />`);
+        text = text.replace(re, `<img class="thumbnail emoticon" src="static/img/emoticons/${name}.svg" />`);
     }
     return text;
 }

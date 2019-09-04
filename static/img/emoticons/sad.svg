@@ -1,53 +1,117 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 567.419 567.419" style="enable-background:new 0 0 567.419 567.419;" xml:space="preserve">
-<g>
-	<g>
-		<g id="group-3svg">
-			<path id="path-1_21_" d="M409.93,209.297c0,18.056-14.627,32.692-32.683,32.692c-18.047,0-32.683-14.636-32.683-32.692
-				s14.636-32.683,32.683-32.683C395.303,176.614,409.93,191.241,409.93,209.297z"/>
-			<path id="path-2_21_" d="M222.011,209.297c0,18.056-14.636,32.692-32.683,32.692s-32.683-14.636-32.683-32.692
-				s14.636-32.683,32.683-32.683S222.011,191.241,222.011,209.297z"/>
-			<path id="path-3_21_" d="M172.538,453.621c-7.434,0-13.468-6.025-13.468-13.468c0-58.138,46.762-105.439,104.245-105.439h45.397
-				c57.483,0,104.245,47.04,104.245,104.855c0,7.443-6.025,13.477-13.468,13.477c-7.435,0-13.459-6.034-13.459-13.477
-				c0-42.955-34.685-77.91-77.317-77.91h-45.397c-42.632,0-77.308,35.206-77.308,78.493
-				C186.006,447.596,179.972,453.621,172.538,453.621z"/>
-			<path id="path-4_21_" d="M283.714,567.419c-156.403,0-283.642-127.275-283.642-283.714C0.072,127.275,127.311,0,283.714,0
-				c156.394,0,283.633,127.275,283.633,283.705C567.347,440.143,440.108,567.419,283.714,567.419z M283.714,26.946
-				c-141.552,0-256.705,115.181-256.705,256.759c0,141.588,115.154,256.768,256.705,256.768
-				c141.543,0,256.696-115.181,256.696-256.768C540.41,142.126,425.257,26.946,283.714,26.946z"/>
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Capa_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 567.419 567.419"
+   style="enable-background:new 0 0 567.419 567.419;"
+   xml:space="preserve"
+   sodipodi:docname="sad.svg"
+   inkscape:version="0.92.4 5da689c313, 2019-01-14"><metadata
+   id="metadata185"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
+   id="defs183" /><sodipodi:namedview
+   pagecolor="#ffffff"
+   bordercolor="#666666"
+   borderopacity="1"
+   objecttolerance="10"
+   gridtolerance="10"
+   guidetolerance="10"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-width="1918"
+   inkscape:window-height="1055"
+   id="namedview181"
+   showgrid="false"
+   inkscape:zoom="0.41591839"
+   inkscape:cx="-272.89007"
+   inkscape:cy="283.7095"
+   inkscape:window-x="0"
+   inkscape:window-y="1103"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="Capa_1" />
+<g
+   id="g148"
+   style="fill:#ffffff">
+	<g
+   id="g146"
+   style="fill:#ffffff">
+		<g
+   id="group-3svg"
+   style="fill:#ffffff">
+			<path
+   id="path-1_21_"
+   d="M409.93,209.297c0,18.056-14.627,32.692-32.683,32.692c-18.047,0-32.683-14.636-32.683-32.692     s14.636-32.683,32.683-32.683C395.303,176.614,409.93,191.241,409.93,209.297z"
+   style="fill:#ffffff" />
+			<path
+   id="path-2_21_"
+   d="M222.011,209.297c0,18.056-14.636,32.692-32.683,32.692s-32.683-14.636-32.683-32.692     s14.636-32.683,32.683-32.683S222.011,191.241,222.011,209.297z"
+   style="fill:#ffffff" />
+			<path
+   id="path-3_21_"
+   d="M172.538,453.621c-7.434,0-13.468-6.025-13.468-13.468c0-58.138,46.762-105.439,104.245-105.439h45.397     c57.483,0,104.245,47.04,104.245,104.855c0,7.443-6.025,13.477-13.468,13.477c-7.435,0-13.459-6.034-13.459-13.477     c0-42.955-34.685-77.91-77.317-77.91h-45.397c-42.632,0-77.308,35.206-77.308,78.493     C186.006,447.596,179.972,453.621,172.538,453.621z"
+   style="fill:#ffffff" />
+			<path
+   id="path-4_21_"
+   d="M283.714,567.419c-156.403,0-283.642-127.275-283.642-283.714C0.072,127.275,127.311,0,283.714,0     c156.394,0,283.633,127.275,283.633,283.705C567.347,440.143,440.108,567.419,283.714,567.419z M283.714,26.946     c-141.552,0-256.705,115.181-256.705,256.759c0,141.588,115.154,256.768,256.705,256.768     c141.543,0,256.696-115.181,256.696-256.768C540.41,142.126,425.257,26.946,283.714,26.946z"
+   style="fill:#ffffff" />
 		</g>
 	</g>
 </g>
-<g>
+<g
+   id="g150">
 </g>
-<g>
+<g
+   id="g152">
 </g>
-<g>
+<g
+   id="g154">
 </g>
-<g>
+<g
+   id="g156">
 </g>
-<g>
+<g
+   id="g158">
 </g>
-<g>
+<g
+   id="g160">
 </g>
-<g>
+<g
+   id="g162">
 </g>
-<g>
+<g
+   id="g164">
 </g>
-<g>
+<g
+   id="g166">
 </g>
-<g>
+<g
+   id="g168">
 </g>
-<g>
+<g
+   id="g170">
 </g>
-<g>
+<g
+   id="g172">
 </g>
-<g>
+<g
+   id="g174">
 </g>
-<g>
+<g
+   id="g176">
 </g>
-<g>
+<g
+   id="g178">
 </g>
 </svg>

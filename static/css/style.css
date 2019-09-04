@@ -11,6 +11,11 @@ html {
     margin-right: 0.5ex;
 }
 
+.emoticon {
+    max-width: 2em;
+    max-height: 1em;
+}
+
 span.nick {
   font-weight: bold;
   margin-right: 1ex;
