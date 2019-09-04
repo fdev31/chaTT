@@ -98,6 +98,7 @@ const smileys = [
     [':\\){2,}', 'shappy'],
     ['XD', 'gibber'],
     [':/', 'confused'],
+    [';\\)', 'wink'],
 ].map( (o) => [new RegExp(` ${o[0]}`, 'g'), o[1]] );
 
 function commandsProcessor(...args) {
