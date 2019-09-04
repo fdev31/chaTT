@@ -97,6 +97,8 @@ const smileys = [
     [':\\)', 'happy'],
     [':\\){2,}', 'shappy'],
     ['XD', 'gibber'],
+    ['^^', 'gibber'],
+    [':D', 'shappy'],
     [':/', 'confused'],
     [';\\)', 'wink'],
 ].map( (o) => [new RegExp(` ${o[0]}`, 'g'), o[1]] );

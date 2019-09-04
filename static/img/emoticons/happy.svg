@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Generator: Adobe Illustrator 19.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 19.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -13,15 +13,15 @@
    id="Capa_1"
    x="0px"
    y="0px"
-   viewBox="0 0 559.464 559.464"
-   style="enable-background:new 0 0 559.464 559.464;"
+   viewBox="0 0 368 368"
+   style="enable-background:new 0 0 368 368;"
    xml:space="preserve"
    sodipodi:docname="happy.svg"
    inkscape:version="0.92.4 5da689c313, 2019-01-14"><metadata
-   id="metadata139"><rdf:RDF><cc:Work
+   id="metadata51"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /></cc:Work></rdf:RDF></metadata><defs
-   id="defs137" /><sodipodi:namedview
+   id="defs49" /><sodipodi:namedview
    pagecolor="#ffffff"
    bordercolor="#666666"
    borderopacity="1"
@@ -32,86 +32,86 @@
    inkscape:pageshadow="2"
    inkscape:window-width="1918"
    inkscape:window-height="1055"
-   id="namedview135"
+   id="namedview47"
    showgrid="false"
-   inkscape:zoom="0.42183233"
-   inkscape:cx="279.73199"
-   inkscape:cy="279.73199"
+   inkscape:zoom="0.64130435"
+   inkscape:cx="-176.98305"
+   inkscape:cy="184"
    inkscape:window-x="0"
    inkscape:window-y="1103"
    inkscape:window-maximized="0"
    inkscape:current-layer="Capa_1" />
 <g
-   id="g102"
+   id="g14"
    style="fill:#ffffff">
 	<g
-   id="g100"
+   id="g12"
    style="fill:#ffffff">
 		<g
-   id="group-4svg"
+   id="g10"
    style="fill:#ffffff">
 			<path
-   id="path-1_32_"
-   d="M308.464,464.943h-54.089c-67.054,0-121.628-50.362-121.628-112.263c0-7.443,6.034-13.477,13.468-13.477     h270.407c7.434,0,13.468,6.034,13.468,13.477C430.101,414.581,375.527,464.943,308.464,464.943z M160.861,366.149     c7.192,40.665,46.385,71.849,93.515,71.849h54.08c47.13,0,86.332-31.184,93.524-71.849H160.861z"
+   d="M184,0C82.544,0,0,82.544,0,184s82.544,184,184,184s184-82.544,184-184S285.456,0,184,0z M184,352     c-92.64,0-168-75.36-168-168S91.36,16,184,16s168,75.36,168,168S276.64,352,184,352z"
+   id="path2"
    style="fill:#ffffff" />
 			<path
-   id="path-2_32_"
-   d="M404.107,206.415c0,17.796-14.42,32.207-32.207,32.207c-17.778,0-32.198-14.411-32.198-32.207     c0-17.787,14.42-32.207,32.198-32.207C389.687,174.208,404.107,188.628,404.107,206.415z"
+   d="M144,152c0-13.232-10.768-24-24-24s-24,10.768-24,24s10.768,24,24,24S144,165.232,144,152z M112,152c0-4.408,3.592-8,8-8     s8,3.592,8,8s-3.592,8-8,8S112,156.408,112,152z"
+   id="path4"
    style="fill:#ffffff" />
 			<path
-   id="path-3_32_"
-   d="M218.936,206.415c0,17.796-14.411,32.207-32.198,32.207s-32.198-14.411-32.198-32.207     c0-17.787,14.411-32.207,32.198-32.207S218.936,188.628,218.936,206.415z"
+   d="M248,128c-13.232,0-24,10.768-24,24s10.768,24,24,24s24-10.768,24-24S261.232,128,248,128z M248,160     c-4.408,0-8-3.592-8-8s3.592-8,8-8c4.408,0,8,3.592,8,8S252.408,160,248,160z"
+   id="path6"
    style="fill:#ffffff" />
 			<path
-   id="path-4_32_"
-   d="M279.732,559.464c-154.203,0-279.664-125.488-279.664-279.727C0.067,125.488,125.529,0,279.732,0     s279.664,125.488,279.664,279.736C559.405,433.975,433.944,559.464,279.732,559.464z M279.732,26.946     c-139.361,0-252.728,113.394-252.728,252.791c0,139.388,113.367,252.782,252.728,252.782     c139.352,0,252.728-113.394,252.728-252.782C532.469,140.34,419.084,26.946,279.732,26.946z"
+   d="M261.336,226.04c-3.296-2.952-8.36-2.664-11.296,0.624C233.352,245.312,209.288,256,184,256     c-25.28,0-49.352-10.688-66.04-29.336c-2.952-3.288-8-3.576-11.296-0.624c-3.296,2.944-3.568,8-0.624,11.296     C125.76,259.368,154.176,272,184,272c29.832,0,58.248-12.64,77.96-34.664C264.904,234.04,264.624,228.984,261.336,226.04z"
+   id="path8"
    style="fill:#ffffff" />
 		</g>
 	</g>
 </g>
 <g
-   id="g104">
+   id="g16">
 </g>
 <g
-   id="g106">
+   id="g18">
 </g>
 <g
-   id="g108">
+   id="g20">
 </g>
 <g
-   id="g110">
+   id="g22">
 </g>
 <g
-   id="g112">
+   id="g24">
 </g>
 <g
-   id="g114">
+   id="g26">
 </g>
 <g
-   id="g116">
+   id="g28">
 </g>
 <g
-   id="g118">
+   id="g30">
 </g>
 <g
-   id="g120">
+   id="g32">
 </g>
 <g
-   id="g122">
+   id="g34">
 </g>
 <g
-   id="g124">
+   id="g36">
 </g>
 <g
-   id="g126">
+   id="g38">
 </g>
 <g
-   id="g128">
+   id="g40">
 </g>
 <g
-   id="g130">
+   id="g42">
 </g>
 <g
-   id="g132">
+   id="g44">
 </g>
 </svg>
