@@ -4,7 +4,7 @@
 # <topic> <payload>
 # in standart input or as argument
 # run with:
-#    mosquitto_sub -v -L 'mqtt://login:pass@hostname:port/rooms/#' | ./memorize.py
+#    mosquitto_sub -v -L 'mqtt://login:pass@hostname:port/rooms/#' -t 'users/#' | ./memorize.py
 # (replace login, pass & hostname)
 
 import os
