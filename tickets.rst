@@ -1,7 +1,7 @@
 Tickets
 =======
 
-:total-count: 4
+:total-count: 5
 
 --------------------------------------------------------------------------------
 
@@ -56,3 +56,14 @@ optimize the DOM refreshing
 innerHTML recomputing everything vs delta ?
 
 Try different techniques and benchmark them in this specific context.
+
+--------------------------------------------------------------------------------
+
+add optional SSL support
+========================
+
+:bugid: 5
+:created: 2019-09-04T00:36:09
+:priority: 0
+
+use wss instead of ws automatically ?
