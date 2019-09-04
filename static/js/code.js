@@ -128,6 +128,7 @@ function drawMessages() {
         .map( (message) => `<div class="textLine"><span class="nick">${message[0]}</span><span class="text">${message[1]}</span></div>`)
         .map( renderCommands )
         .join('');
+    elt.style['max-height'] = `${window.innerHeight-100}px`;
     elt.scrollTop = elt.scrollHeight;
 }
 
