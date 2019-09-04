@@ -172,6 +172,7 @@ function appInit() {
     dom.rooms = document.getElementById("all_rooms");
     dom.input = document.getElementById('input_text');
     dom.input.addEventListener('keydown', sendText);
+    const {login, password} = makeRandomPair(prompt('challenge:'));
 
     drawRooms();
     drawUsers();

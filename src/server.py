@@ -7,8 +7,6 @@ import getpass
 
 # TODO: config file
 HOST = os.getenv('HOST') or input('host (mqtt.myhost.com): ').strip()
-USER = os.getenv('USER') or input('login: ').strip()
-PASS = os.getenv('PASS') or getpass.getpass('password: ').strip()
 
 import bottle
 from bottle import route, run, template
@@ -54,9 +52,7 @@ def index():
     known_rooms = list(KNOWN_ROOMS)
     ip_addr = bottle.request.environ.get('HTTP_X_FORWARDED_FOR', '')
     return template('./templates/index.html',
-            user=USER,
             host=HOST,
-            password=PASS,
             ip_addr=ip_addr,
             all_users=json.dumps(known_users),
             all_rooms=json.dumps(known_rooms),
