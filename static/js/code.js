@@ -172,7 +172,9 @@ function appInit() {
     dom.rooms = document.getElementById("all_rooms");
     dom.input = document.getElementById('input_text');
     dom.input.addEventListener('keydown', sendText);
+
     const [login, password] = makeRandomPair(prompt('challenge:'));
+    document.getElementById('title').textContent = `ChaTT-${login.slice(3, 5)}`;
 
     drawRooms();
     drawUsers();
