@@ -123,15 +123,21 @@ function renderCommands(text) {
     return text;
 }
 
+function recalcLayout() {
+    const elt = document.getElementById('all_texts');
+    elt.style['max-height'] = `${window.innerHeight-100}px`;
+    elt.scrollTop = elt.scrollHeight;
+}
+
 function drawMessages() {
     const elt = document.getElementById('all_texts');
     elt.innerHTML = messagesLog[activeSession.currentRoom]
         .map( (message) => `<div class="textLine"><span class="nick">${message[0]}</span><span class="text">${message[1]}</span></div>`)
         .map( renderCommands )
         .join('');
-    elt.style['max-height'] = `${window.innerHeight-100}px`;
     elt.scrollTop = elt.scrollHeight;
 }
+
 
 function publish(topic, payload, opts) {
     return client.publish(topic, payload?JSON.stringify(payload):payload, opts);
@@ -192,6 +198,8 @@ function appInit() {
 
     const [login, password] = makeRandomPair(prompt('challenge:'));
     document.getElementById('title').textContent = `ChaTT-${login.slice(3, 5)}`;
+    window.onresize = recalcLayout;
+    recalcLayout();
 
     drawRooms();
     drawUsers();
