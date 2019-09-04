@@ -189,7 +189,7 @@ function appInit() {
     globEvents.on(['messageArrived', 'messageEmitted'], (room, payload) => {if (room == activeSession.currentRoom) drawMessages()});
 
     // setup the Mqtt client
-    client = new mqtt(`mqtt://${login}:${password}@${host}:9001`);
+    client = new mqtt(`wss://${login}:${password}@${host}:9001`);
     client.on('error', (err) => console.log('err', err));
     client.on('connect', () => {
         publish(`users/${activeSession.userName}/hello`, {'ipAddress': ipAddr});
