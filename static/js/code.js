@@ -97,7 +97,7 @@ const smileys = [
     [':\\)', 'happy'],
     [':\\){2,}', 'shappy'],
     ['(?:XD|xd)', 'gibber'],
-    ['^^', 'gibber'],
+    ['\\^\\^', 'gibber'],
     [':[Dd]', 'shappy'],
     [':[Pp]', 'crazy'],
     [':/', 'confused'],
