@@ -97,7 +97,7 @@ if __name__ == '__main__':
         for line in fileinput.input():
             topic, message = line.split(' ', 1)
             process_message(topic, message)
-    except Exception:
+    except (Exception, KeyboardInterrupt):
         debouncer.running = False
         json.dump({'messages': messages, 'authors': list(authors), 'rooms': list(channels)}, open(DB_FILE, 'w'))
 

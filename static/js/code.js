@@ -92,6 +92,14 @@ const _genericCommandRe = ':([a-z]{2,10}):(?:[(](.*)[)])?';
 const _urlRe = '(https?)://([^   \n]+)';
 const commandsPattern = new RegExp(`(?:${_genericCommandRe})|(?:${_urlRe})`);
 
+const smileys = [
+    [':\\(', 'sad'],
+    [':\\)', 'happy'],
+    [':\\){2,}', 'shappy'],
+    ['XD', 'gibber'],
+    [':/', 'confused'],
+].map( (o) => [new RegExp(` ${o[0]}`, 'g'), o[1]] );
+
 function commandsProcessor(...args) {
     // get the result of a regex match and return the matching command result
     const params = args.filter( (el) => el );
@@ -104,7 +112,11 @@ function commandsProcessor(...args) {
 }
 
 function renderCommands(text) {
-    return text.replace(commandsPattern, commandsProcessor);
+    text = text.replace(commandsPattern, commandsProcessor);
+    for (let [re, name] of smileys) {
+        text = text.replace(re, `<img class="thumbnail" src="static/img/emoticons/${name}.svg" />`);
+    }
+    return text;
 }
 
 function drawMessages() {

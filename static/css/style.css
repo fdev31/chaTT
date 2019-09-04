@@ -7,6 +7,8 @@ html {
 
 .thumbnail {
     transition-duration: 1s;
+    margin-left: 0.5ex;
+    margin-right: 0.5ex;
 }
 
 span.nick {
