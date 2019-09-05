@@ -399,7 +399,9 @@ body {
 }
 
 #input_text {
-  width: 98%;
+  width: 66%;
+  border-radius: 5px;
+  margin-bottom: 1ex;
 }
 #all_texts {
    overflow-y:auto;
