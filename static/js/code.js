@@ -125,7 +125,7 @@ function renderCommands(text) {
 
 function recalcLayout() {
     const elt = document.getElementById('all_texts');
-    elt.style['max-height'] = `${window.innerHeight-100}px`;
+    elt.style['max-height'] = `${window.innerHeight-150}px`;
     elt.scrollTop = elt.scrollHeight;
 }
 
