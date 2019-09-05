@@ -10,6 +10,7 @@
 import os
 import json
 import time
+import socket
 import fileinput
 import threading
 import subprocess
@@ -56,7 +57,8 @@ def publish_text(room, log):
     requests.post(HTTP_SERVER + 'cmd/setRoomMessages', json={'room': room, 'messages': log})
 
 def publish_ipaddress(user, ip_address):
-    mqtt_pub('rooms/main/newtext', {'author': 'bot', 'text': 'Welcome %s @ %s'%(user, ip_address)})
+    hostname = socket.gethostbyaddr(ip_address)
+    mqtt_pub('rooms/main/newtext', {'author': 'bot', 'text': 'Welcome <b>%s</b>@%s [%s]'%(user, hostname, ip_address)})
 
 def process_message(topic, message):
     split_topic = topic.split('/')
