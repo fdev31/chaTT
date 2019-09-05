@@ -104,8 +104,7 @@ def handle_newcomer(user, data):
         message.append('%s@%s[%s]'%(user, hostname, ip_address))
         mqtt_pub('rooms/main/newtext', {'author': 'bot', 'text': ' '.join(message)})
 
-    print(message, ignore, ip_address, hostname, friends)
-    set_author_info(user, ip=ip_address, host=hostname)
+    set_author_info(user, ip=ip_address, host=hostname, last_connect=time.time(), last_seen=time.time())
 
 def process_message(topic, message):
     split_topic = topic.split('/')
@@ -127,6 +126,7 @@ def process_message(topic, message):
             publish_text(channel, messages[channel])
             if old_len < len(authors):
                 debouncer.schedule(publish_users, LATENCY)
+            set_author_info(user, last_seen=time.time())
     elif split_topic[0] == 'users':
         if split_topic[2] == 'hello':
             handle_newcomer(split_topic[1], obj)
