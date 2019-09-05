@@ -29,7 +29,27 @@ password = os.getenv('PASS') or input('Enter pass: ')
 DB_FILE='chatinfo.json'
 
 LATENCY = 0.4
+USER_IDLE_DELAY= 10*60 # 10 minutes
+
 debouncer = debounce.Debouncer()
+
+class IdleMarker(threading.Thread):
+    running = True
+    def run(self):
+        while self.running:
+            for n in range(60):
+                time.sleep(1)
+                if not self.running:
+                    break
+            else:
+                now = time.time()
+                for author in list(authors):
+                    info = authors_info.get(author)
+                    if info == None or now - info.get('last_seen', 0) > USER_IDLE_DELAY:
+                        authors.remove(author)
+                        print("Removing %s"%author)
+                        mqtt_pub('users/%s/logout'%author)
+                        publish_users()
 
 authors = set()
 channels = set()
@@ -56,7 +76,7 @@ if os.path.exists(DB_FILE):
     for addr, namelist in obj.get('authors_by_addr', {}).items():
         authors_by_addr[addr] = set(namelist)
 
-def mqtt_pub(topic, payload):
+def mqtt_pub(topic, payload={}):
     subprocess.call(['mosquitto_pub', '-L', 'mqtt://'+login+':'+password+'@localhost:1883/'+topic, '-m', json.dumps(payload)])
 
 def publish_channels():
@@ -81,7 +101,7 @@ def handle_newcomer(user, data):
     friends = other_names.copy()
     friends.discard(user)
 
-    message = []
+    message = ['@%s: '%user]
     ignore = False
 
     if user not in authors_info:
@@ -105,7 +125,7 @@ def handle_newcomer(user, data):
                 ignore = False
 
     if not ignore:
-        message.append('%s@%s [%s]'%(user, hostname, ip_address))
+        message.append('From %s :: %s'%(hostname, ip_address))
         mqtt_pub('rooms/main/newtext', {'author': 'bot', 'text': ' '.join(message)})
 
     debouncer.schedule(lambda: set_author_info(user, ip=ip_address, host=hostname, last_connect=time.time(), last_seen=time.time()), 2.0)
@@ -141,6 +161,8 @@ def process_message(topic, message):
 
 if __name__ == '__main__':
     debouncer.start()
+    im = IdleMarker()
+    im.start()
     try:
         def publish_all_texts():
             for channel in channels:
@@ -156,6 +178,7 @@ if __name__ == '__main__':
             process_message(topic, message)
     except (Exception, KeyboardInterrupt):
         debouncer.running = False
+        im.running = False
         json.dump({
             'messages': messages,
             'authors_by_addr': {k: list(v) for k, v in authors_by_addr.items()},

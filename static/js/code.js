@@ -153,7 +153,7 @@ function sendText(keypress) {
 }
 
 function messageArrived(topic, msg) {
-    const parsed = topic.match(new RegExp('^rooms/([^/]+)/(.+)$'));
+    let parsed = topic.match(new RegExp('^rooms/([^/]+)/(.+)$'));
 
     if (parsed) {
         const room = parsed[1];
@@ -174,6 +174,15 @@ function messageArrived(topic, msg) {
 
             _refreshMessageLog(room, payload);
             globEvents.emit(payload.author != activeSession.userName?'messageArrived':'messageEmitted', room, payload);
+        }
+    }
+
+    parsed = topic.match(new RegExp('^users/([^/]+)/(.+)$'));
+
+    if (parsed) {
+        if (parsed[2] == 'logout') {
+            users.remove(parsed[1]);
+            drawUsers();
         }
     }
 }
@@ -224,6 +233,7 @@ function appInit() {
         activeSession.bellSound = new Audio('/static/snd/bell.mp3');
         activeSession.bellSound.volume = 0.0;
         client.subscribe("rooms/#", (err) => {err && console.log('Error', err)} );
+        client.subscribe("users/#", (err) => {err && console.log('Error', err)} );
         drawMessages();
         focusInput();
         console.log('init finished.');

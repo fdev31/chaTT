@@ -34,8 +34,8 @@ def cb():
 
 @bottle.post('/cmd/setAuthors')
 def cb():
-    for name in bottle.request.json:
-        KNOWN_USERS.add(name)
+    KNOWN_USERS.clear()
+    KNOWN_USERS.update(bottle.request.json)
 
 # static files - should not be used,
 # use your http server static file capabilities instead
