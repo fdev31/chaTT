@@ -104,7 +104,7 @@ def handle_newcomer(user, data):
         message.append('%s@%s[%s]'%(user, hostname, ip_address))
         mqtt_pub('rooms/main/newtext', {'author': 'bot', 'text': ' '.join(message)})
 
-    set_author_info(user, ip=ip_address, host=hostname, last_connect=time.time(), last_seen=time.time())
+    debouncer.schedule(lambda: set_author_info(user, ip=ip_address, host=hostname, last_connect=time.time(), last_seen=time.time()), 2.0)
 
 def process_message(topic, message):
     split_topic = topic.split('/')
