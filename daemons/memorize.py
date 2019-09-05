@@ -91,13 +91,18 @@ def handle_newcomer(user, data):
     else:
         old_data = authors_info.get(user)
         if old_data['ip'] == ip_address:
-            ignore = False
+            ignore = True
         else:
             message.append('%s, did you change your computer?'%user) # host changed
         if user not in authors: # was online!
             message.append('Welcome back online <b>%s</b>! :)'%user)
+            ignore = False
         else: # reconnect ?
-            message.append('Having connection issues?')
+            if time.time() - old_data['last_seen'] < 5*60:
+                message.append('Having connection issues?')
+            else:
+                message.append('Long time no see! ;)')
+                ignore = False
 
     if not ignore:
         message.append('%s@%s [%s]'%(user, hostname, ip_address))
