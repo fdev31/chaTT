@@ -181,7 +181,7 @@ function messageArrived(topic, msg) {
 
     if (parsed) {
         if (parsed[2] == 'logout') {
-            users.remove(parsed[1]);
+            users.delete(parsed[1]);
             drawUsers();
         }
     }
