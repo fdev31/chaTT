@@ -4,6 +4,8 @@ const maxMessages = 50;
 
 let client = null;
 
+const userColors = '#fabebe #ffd8b1 #fffac8 #aaffc3 #e6beff #ffffff #808080 #e6194b #f58231 #ffe119 #bcf60c #3cb44b #4363D8 #911eb4 #f032e6 #808080'.split(' ');
+
 const activeSession = {
     userName: 'NoName',
     currentRoom: 'main'
@@ -57,7 +59,7 @@ function drawUsers() {
     const usr = document.getElementById("all_nicks");
 
     usr.innerHTML = Array.from(users)
-        .map( (name) => activeSession.userName==name?'':`<div onclick="userListClicked(this)">${name}</div>`)
+        .map( (name, idx) => activeSession.userName==name?'':`<div style="color:${userColors[idx]}" onclick="userListClicked(this)">${name}</div>`)
         .join('');
 }
 
