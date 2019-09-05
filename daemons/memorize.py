@@ -91,7 +91,6 @@ def handle_newcomer(user, data):
     else:
         old_data = authors_info.get(user)
         if old_data['ip'] == ip_address:
-#             ignore = True # reconnect
             ignore = False
         else:
             message.append('%s, did you change your computer?'%user) # host changed
