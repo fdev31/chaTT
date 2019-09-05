@@ -133,10 +133,14 @@ function recalcLayout() {
 
 function drawMessages() {
     const elt = document.getElementById('all_texts');
-    elt.innerHTML = messagesLog[activeSession.currentRoom]
+    const currentRoomMessages = messagesLog[activeSession.currentRoom];
+    const newContent = currentRoomMessages?
+        currentRoomMessages
         .map( (message) => `<div class="textLine"><span class="nick" style="color: ${userColors[Array.from(users).indexOf(message[0])]}">${message[0]}</span><span class="text">${message[1]}</span></div>`)
         .map( renderCommands )
-        .join('');
+        .join('')
+    :"<h1>It's empty here!</h1>";
+    elt.innerHTML = newContent;
     elt.scrollTop = elt.scrollHeight;
 }
 

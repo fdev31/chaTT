@@ -117,6 +117,8 @@ body {
 
 select, input, button, textarea {
   font: 99% arial helvetica clean sans-serif;
+  border-radius: 5px;
+  border: solid 2px #dcdcdc;
 }
 
 table {
