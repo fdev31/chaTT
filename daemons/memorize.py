@@ -125,7 +125,7 @@ def process_message(topic, message):
             publish_text(channel, messages[channel])
             if old_len < len(authors):
                 debouncer.schedule(publish_users, LATENCY)
-            set_author_info(user, last_seen=time.time())
+            set_author_info(author, last_seen=time.time())
     elif split_topic[0] == 'users':
         if split_topic[2] == 'hello':
             handle_newcomer(split_topic[1], obj)
