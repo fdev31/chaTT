@@ -233,7 +233,11 @@ function appInit() {
 
     // setup the Mqtt client
     client = new mqtt(`wss://${login}:${password}@${host}:9001`);
-    client.on('error', (err) => {console.log('err', err); alert('failed.')});
+    client.on('error', (err) => {
+        client.options.reconnectPeriod = 0;
+        console.log('err', err);
+        alert('failed.');
+    });
     client.on('connect', () => {
         publish(`users/${activeSession.userName}/hello`, {'ipAddress': ipAddr});
         activeSession.bellSound = new Audio('/static/snd/bell.mp3');
