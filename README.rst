@@ -90,3 +90,9 @@ HTML template elements
 #all_texts
    element containing the messages
 
+
+Misc notes
+##########
+
+Doesn't work with mosquitto 1.6.4 on archlinux
+    socket is closed during the websocket handshake
