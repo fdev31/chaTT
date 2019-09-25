@@ -1,2 +1,4 @@
 #!/bin/sh
-exec python ./src/server.py
+source pyenv/bin/activate
+exec uwsgi --ini sample_configs/uwsgi.ini
+#exec python ./src/server.py

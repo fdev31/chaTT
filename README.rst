@@ -30,6 +30,13 @@ And connect with your browser::
 
    xdg-open http://localhost:8080/
 
+Mqtt
+====
+
+A mosquitto setup is also provided, try the sample config::
+
+    mosquitto -c sample_configs/mosquitto.conf
+
 Roadmap
 #######
 
