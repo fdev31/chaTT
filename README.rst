@@ -15,6 +15,8 @@ Try this installation method::
    pip install -r requires.txt
 
 
+Alternatively you can run `mkEnv.sh`.
+
 Then you can run the server::
 
    ./run.sh
@@ -37,6 +39,16 @@ A mosquitto setup is also provided, try the sample config::
 
     mosquitto -c sample_configs/mosquitto.conf
 
+Storage (addon)
+===============
+
+To enable the storage of messages, you have to run `src/memorize.py`::
+
+    mosquitto_sub -L "mqtt://$USER:$PASS@localhost:1883/rooms/#" -t 'users/#' -v | python ./memorize.py
+
+Look at the header in the file for more information.
+
+
 Roadmap
 #######
 
@@ -44,11 +56,6 @@ For a rough list of tasks, check the tickets__
 
 __ https://github.com/fdev31/chaTT/blob/master/tickets.rst
 
-
-Features
-########
-
-To enable the storage of messages, you have to run `src/memorize.py`
 
 Technical details
 #################
