@@ -8,14 +8,8 @@ Quickstart
 
 `Download the project <https://github.com/fdev31/chaTT/archive/master.zip>`_, uncompress it and open a shell inside the extracted folder.
 
-Try this installation method::
 
-   python -m venv /tmp/foo
-   source /tmp/foo/bin/activate
-   pip install -r requires.txt
-
-
-Alternatively you can run `mkEnv.sh`.
+Run `mkEnv.sh` (once)
 
 Then you can run the server::
 
@@ -71,7 +65,7 @@ Main template
 /cmd/*
 ------
 
-Control of the server data, used by `memorize.py` only and should not be allowed externally.
+Control of the server data, used by `memorize.py` only and should not be allowed externally (allow only *localhost*).
 
 Mqtt Topics
 ===========
@@ -85,7 +79,11 @@ rooms/
 
          :author: the author nickname
          :text: the message
+users/
+    <user name>
+        :hello: *welcome message*
 
+            *payload is undefined*
 
 HTML template elements
 ======================
