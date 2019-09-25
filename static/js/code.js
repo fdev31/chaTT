@@ -211,8 +211,10 @@ function appInit() {
     dom.input = document.getElementById('input_text');
     dom.input.addEventListener('keydown', sendText);
 
-    const [login, password] = makeRandomPair(prompt('challenge:'));
-    document.getElementById('title').textContent = `ChaTT-${login.slice(3, 5)}`;
+    let passphrase = prompt('challenge:') || false;
+    const [login, password] = passphrase ? makeRandomPair(passphrase):[false, false];
+    passphrase = undefined;
+    document.getElementById('title').textContent = `ChaTT-${login?login.slice(3, 5):'unprotected'}`;
     window.onresize = recalcLayout;
     recalcLayout();
 
@@ -232,7 +234,11 @@ function appInit() {
     globEvents.on(['messageArrived', 'messageEmitted'], (room, payload) => {if (room == activeSession.currentRoom) drawMessages()});
 
     // setup the Mqtt client
-    client = new mqtt(`wss://${login}:${password}@${host}:9001`);
+    const [mqttProto, mqttPort] = document.location.href.match(/^https/)?['wss',9001]:['ws',9001];
+    if (login)
+        client = new mqtt(`${mqttProto}://${login}:${password}@${host}:${mqttPort}`);
+    else
+        client = new mqtt(`${mqttProto}://${host}:${mqttPort}`);
     client.on('error', (err) => {
         client.options.reconnectPeriod = 0;
         console.log('err', err);
