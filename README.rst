@@ -11,13 +11,13 @@ Quickstart
 
 Run `mkEnv.sh` (once)
 
-Then you can run the server::
+Then you can run the server (edit ``sample_configs/uwsgi.ini`` first to set the environment variables!)::
 
    ./run.sh
 
 Alternatively, to not be asked for the credentials::
 
-   PASS=server_password HOST=server_hostname USER=server_username ./run.sh
+   HOST=server_hostname ./run.sh
 
 .. note:: you need to replace the `server_*` values with the ones matching your server setup.
 
@@ -25,6 +25,30 @@ Alternatively, to not be asked for the credentials::
 And connect with your browser::
 
    xdg-open http://localhost:8080/
+
+Using the passphrase
+====================
+
+Generate the USER & PASS pairs::
+
+    ./scripts/genpass.js "foobar"
+
+Sample output::
+
+    Login & pass:
+    R3ZXKboT3M5VqPxOQclSB1SPAM3TVS5lqq33YTyi6iN26SRtboiRAzV4TbGP6ha4CI
+    vUYP1AR1P23lTb6XAO1KhNaK2NQAFQ6DtrLpaEC1wdvu5hafjvCVQFn4R64WuQv4pD
+
+Then edit your uswsgi .ini file to use those as ``USER`` and ``PASS`` environment (same as ``HOST``).
+
+You can also export the environment before running ``run.sh``::
+
+       export USER=server_username
+       export PASS=server_password 
+
+.. note::
+
+    It is also recommended to use HTTPS and the wss socket
 
 Mqtt
 ====
