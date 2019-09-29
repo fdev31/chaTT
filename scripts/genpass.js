@@ -1,6 +1,6 @@
 #!/bin/env node
 
-const {makeRandomPair} = require('../static/js/randgen');
+const {makeRandomPair} = require('../src/randgen');
 
 if (process.argv.length == 3) {
     console.log('Login & pass:');

@@ -1,38 +1,16 @@
 "use strict"
 
+import './libs/snap.svg-min.js';
+import {connect} from './libs/mqtt.min.js';
+import {makeRandomPair} from './randgen.js';
+
 const maxMessages = 50;
 
 let client = null;
 
-const userColors = '#fabebe #ffd8b1 #fffac8 #aaffc3 #e6beff #ffffff #808080 #e6194b #f58231 #ffe119 #bcf60c #3cb44b #4363D8 #911eb4 #f032e6 #808080'.split(' ');
-
-let ICONS_STATES = {
-    sound_icon : {
-        hover: {
-            rect4525: {d:'m 5.2683039,291.09663 c 0.2072621,-0.20725 0.5409829,-0.20725 0.7482373,0 l 2.2447171,2.24472 c 0.2072657,0.20727 0.2072606,0.54097 -1.4e-6,0.74824 -0.2072621,0.20725 -0.5409716,0.20727 -0.7482373,0 l -2.2447171,-2.24472 c -0.2072543,-0.20726 -0.2072607,-0.54097 1.4e-6,-0.74824 z'},
-            rect4527: {'d': 'm 8.2421792,291.09659 c 0.2072621,0.20727 0.2072557,0.54098 1.4e-6,0.74824 l -2.2447171,2.24472 c -0.2072657,0.20727 -0.5409752,0.20725 -0.7482373,0 -0.207262,-0.20727 -0.2072671,-0.54097 -1.4e-6,-0.74824 l 2.2447171,-2.24472 c 0.2072544,-0.20725 0.5409752,-0.20725 0.7482373,0 z'}
-        },
-        on: {
-            rect4525: {'d': 'm 7.5140723,290.1303 c 0.2628127,1e-5 0.474402,0.2116 0.4744017,0.47441 l -3.9e-6,4.09089 c -3e-7,0.26282 -0.211581,0.47439 -0.4744022,0.4744 -0.2628127,-1e-5 -0.474402,-0.21158 -0.4744017,-0.47441 l 3.9e-6,-4.09089 c 3e-7,-0.26281 0.211581,-0.47439 0.4744022,-0.4744 z'},
-            rect4527: {'d': 'm 6.1133416,291.13855 c 0.2191871,0 0.3956408,0.17646 0.3956411,0.39564 l 3.3e-6,2.37385 c 3e-7,0.21919 -0.1764607,0.39564 -0.3956408,0.39564 -0.2191871,0 -0.3956408,-0.17645 -0.3956411,-0.39564 l -3.2e-6,-2.37385 c -3e-7,-0.21918 0.1764606,-0.39564 0.3956407,-0.39564 z'}
-        },
-        off: {
-            rect4525: {'d': 'm 5.6433321,291.6021 c 0.1549875,-0.15498 0.4045368,-0.15498 0.5595205,0 l 1.6785654,1.67857 c 0.1549908,0.15499 0.1549864,0.40453 -1e-6,0.55952 -0.1549875,0.15498 -0.4045298,0.15499 -0.5595205,0 l -1.6785654,-1.67857 c -0.1549837,-0.15498 -0.1549864,-0.40453 1e-6,-0.55952 z'},
-            rect4527: {'d': 'm 7.867151,291.60207 c 0.1549874,0.15499 0.1549847,0.40454 1e-6,0.55952 l -1.6785654,1.67857 c -0.1549907,0.15499 -0.404533,0.15498 -0.5595205,0 -0.1549874,-0.15499 -0.1549918,-0.40453 -1e-6,-0.55952 l 1.6785654,-1.67857 c 0.1549837,-0.15498 0.404533,-0.15498 0.5595205,0 z'}
-        }
-    },
-    room_icon: {
-        hover: {
-            rect4975: {'width': 6.8, x: 1.058},
-            rect4979: {'width': 6.8, x: -295.94},
-        },
-        reset: {
-            rect4975: {'width': 4.23, x: 2.11},
-            rect4979: {'width': 4.23, x: -294.6},
-        }
-    }
-}
-ICONS_STATES.sound_icon.reset = ICONS_STATES.sound_icon.off;
+import {userColors} from './ui_styling.js';
+import {iconManager} from './iconManager.js';
+import {renderCommands} from './commands.js';
 
 const activeSession = {
     userName: 'NoName',
@@ -73,7 +51,7 @@ function drawRooms() {
         return;
     }
     dom.rooms.innerHTML = Array.from(rooms)
-        .map( (name) => (`<div class="roomName" attr-room="${name}" onclick="roomListClicked(this)">${name}</div>`) )
+        .map( (name) => (`<div class="roomName" attr-room="${name}" onclick="app.roomListClicked(this)">${name}</div>`) )
         .join('');
     const room = _getRoomDiv(activeSession.currentRoom);
     if (room) room.classList.add('selected');
@@ -87,7 +65,7 @@ function drawUsers() {
     const usr = document.getElementById("all_nicks");
 
     usr.innerHTML = Array.from(users)
-        .map( (name, idx) => activeSession.userName==name?'':`<div style="color:${userColors[idx]}" onclick="userListClicked(this)">${name}</div>`)
+        .map( (name, idx) => activeSession.userName==name?'':`<div style="color:${userColors[idx]}" onclick="app.userListClicked(this)">${name}</div>`)
         .join('');
 }
 
@@ -107,50 +85,6 @@ function thumbnailClicked(elt) {
         elt.style['left'] = '0';
         elt.style['top'] = '0';
     }
-}
-
-// Text rendering functions
-const commands = {};
-commands.img = (cmd, url) => `<img class="thumbnail" onclick="thumbnailClicked(this)" style="max-height: 1em" src="${url}"/>`;
-commands.http = (protocol, path) => {
-    const host = path.split('/')[0];
-    return `<a href="${protocol}://${path}">(link to ${host})</a>`;
-};
-commands.https = commands.http;
-
-const _genericCommandRe = ':([a-z]{2,10}):(?:[(](.*)[)])?';
-const _urlRe = '(https?)://([^   \n]+)';
-const commandsPattern = new RegExp(`(?:${_genericCommandRe})|(?:${_urlRe})`);
-
-const smileys = [
-    [':\\(', 'sad'],
-    [':\\)', 'happy'],
-    [':\\){2,}', 'shappy'],
-    ['(?:XD|xd)', 'gibber'],
-    ['\\^\\^', 'gibber'],
-    [':[Dd]', 'shappy'],
-    [':[Pp]', 'crazy'],
-    [':/', 'confused'],
-    [';\\)', 'wink'],
-].map( (o) => [new RegExp(` ${o[0]}`, 'g'), o[1]] );
-
-function commandsProcessor(...args) {
-    // get the result of a regex match and return the matching command result
-    const params = args.filter( (el) => el );
-    // params = [group, subgroup1 (command), subgroup2 (parameters)]
-    const handler = commands[params[1]];
-    if (handler) {
-        return handler(...params.splice(1));
-    }
-    return `(?)${params[0]}(?)`;
-}
-
-function renderCommands(text) {
-    text = text.replace(commandsPattern, commandsProcessor);
-    for (let [re, name] of smileys) {
-        text = text.replace(re, `<img class="thumbnail emoticon" src="static/img/emoticons/${name}.svg" />`);
-    }
-    return text;
 }
 
 function recalcLayout() {
@@ -232,7 +166,6 @@ function _refreshMessageLog(room, payload) {
 
 // DOM callbacks
 const dom = {}
-let iconManager = null;
 
 function appInit() {
     // install ENTER handler for the input
@@ -265,9 +198,9 @@ function appInit() {
     // setup the Mqtt client
     const [mqttProto, mqttPort] = document.location.href.match(/^https/)?['wss',9001]:['ws',9001];
     if (login)
-        client = new mqtt(`${mqttProto}://${login}:${password}@${host}:${mqttPort}`);
+        client = connect(`${mqttProto}://${login}:${password}@${host}:${mqttPort}`);
     else
-        client = new mqtt(`${mqttProto}://${host}:${mqttPort}`);
+        client = connect(`${mqttProto}://${host}:${mqttPort}`);
     client.on('error', (err) => {
         client.options.reconnectPeriod = 0;
         console.log('err', err);
@@ -282,41 +215,9 @@ function appInit() {
         drawMessages();
         focusInput();
         console.log('init finished.');
-        iconManager = new IconManager();
     });
     client.on('message', messageArrived);
 }
-
-
-class IconManager {
-    constructor() {
-        /** replace all .svgIcon with the real svg icon base on the name, eg:
-         * <span class="svgIcon" id="sound_icon" name="sound_off" />
-         * - keeps the id attribute untouched & forces "svgIcon" class
-         */
-        this.current_states = {};
-        document.querySelectorAll('.svgIcon').forEach( (elt)=> {
-            elt.parentElement.onmouseover = ()=> iconManager.changeState(elt.attributes.id.value, 'hover');
-            elt.parentElement.onmouseleave = ()=> iconManager.changeState(elt.attributes.id.value); // no state == reset to last state
-            elt.outerHTML = `<object class="svgIcon" id="${elt.attributes.id.value}" type="image/svg+xml" data="static/img/icons/${elt.attributes.title.value}.svg"></object>`
-        }
-        );
-    }
-    changeState(icon, state) {
-        if (state == undefined) {
-            state = this.current_states[icon] || 'reset';
-        } else if (state != 'hover') { // hover is not a real state, it's "transient"
-            this.current_states[icon] = state;
-        }
-        const elt = Snap(document.getElementById(icon));
-        const states = this.icon_states[icon][state];
-        for (const k of Object.keys(states)) {
-            elt.select('#'+k).animate(states[k], 200);
-        }
-    }
-}
-
-IconManager.prototype.icon_states = ICONS_STATES;
 
 function enableAudio() {
     if (activeSession.bellSound.volume == 0.0) {
@@ -361,5 +262,15 @@ function createRoom() {
         return;
     }
     publish(`rooms/${roomName.replace(/[+]/g, '&gt;')}/new`);
+}
+
+// used in the template, global functions
+
+window.app = {
+    init: appInit,
+    createRoom,
+    enableAudio,
+    userListClicked,
+    roomListClicked
 }
 

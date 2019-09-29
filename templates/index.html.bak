@@ -1,80 +1,22 @@
+<!DOCTYPE html>
+<html dir="ltr">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>ChaTT</title>
+    <style type="text/css">
 html {
-  color: white;
-  background-color: #a2a8b0;
-  background: white url("/static/img/background.jpg") no-repeat fixed 0% 0%;
-  font-size: 150%;
-}
-button > * {
-  pointer-events: none;
-}
-
-button {
-    border: solid 2px #559;
-    box-shadow: 2px 2px 3px 2px rgba(5,0,0,0.5);
-}
-button:hover {
-    border: solid 2px #990;
-    background-color: #cfb9b9;
-}
-
-.svgIcon {
-    width: 24px;
-}
-
-.thumbnail {
-    transition-duration: 1s;
-    margin-left: 0.5ex;
-    margin-right: 0.5ex;
-}
-
-.emoticon {
-    max-width: 2em;
-    max-height: 1em;
-}
-
-span.nick {
-  font-weight: bold;
-  margin-right: 1ex;
-  margin-left: 0.5ex;
-}
-
-span.text {
-  color: #ddd;
-  font-family: 'Chilanka', cursive;
-  font-size: 130%;
+  color: black;
+  background: white url("/static/background.jpg") no-repeat fixed 0% 0%;
 }
 
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
   margin: 0px;
   padding: 0px;
-  font-family: 'Noto Sans', sans-serif;
-
 }
 
 table {
   border-collapse: collapse;
   border-spacing: 0px;
-}
-
-div.roomName {
-    color: #fff;
-}
-
-div.roomName:hover {
-    color: #99b;
-}
-div.roomName.selected {
-    font-weight: bold;
-}
-
-table.maintable {
-  border: none;
-  max-height: 40em;
-}
-
-tr > td {
-    border: none;
-    border-left: solid 2px;
 }
 
 fieldset, img {
@@ -136,8 +78,6 @@ body {
 
 select, input, button, textarea {
   font: 99% arial helvetica clean sans-serif;
-  border-radius: 5px;
-  border: solid 2px #dcdcdc;
 }
 
 table {
@@ -302,6 +242,7 @@ body {
 
 .yui-ge div.first, .yui-gf .yui-u {
   width: calc(100% - 100px);
+  max-height: 40em;
 }
 
 .yui-ge .yui-u, .yui-gf div.first {
@@ -415,34 +356,57 @@ body {
 #bd, .yui-g, .yui-gb, .yui-gc, .yui-gd, .yui-ge, .yui-gf {
 }
 
-#mainframe {
-    max-height: 50ex;
-}
-
 #input_text {
-  width: 66%;
-  border-radius: 5px;
-  margin-bottom: 1ex;
-  padding: 2ex !important;
-  box-shadow: inset 0 0 10px #000;
-  border: none;
-  font-family: 'Chilanka', cursive;
+  width: 98%;
 }
 #all_texts {
    overflow-y:auto;
-   max-height: 60ex;
 }
-#all_nicks, #all_rooms {
-   padding: .4ex;
-   cursor: pointer;
-   overflow-y:auto;
-   max-height: 60ex;
+#all_nicks, #all_channels {
+    cursor: pointer;
 }
 
-#all_nicks, #all_texts {
-    border-left: solid 2px #676767;
-    padding-left: 5px;
-}
-
-
+</style><style type="text/css">/*
+Copyright (c) 2008, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 2.6.0
+*/
 h1{font-size:138.5%;}h2{font-size:123.1%;}h3{font-size:108%;}h1,h2,h3{margin:1em 0;}h1,h2,h3,h4,h5,h6,strong{font-weight:bold;}abbr,acronym{border-bottom:1px dotted #000;cursor:help;} em{font-style:italic;}blockquote,ul,ol,dl{margin:1em;}ol,ul,dl{margin-left:2em;}ol li{list-style:decimal outside;}ul li{list-style:disc outside;}dl dd{margin-left:1em;}th,td{border:1px solid #000;padding:.5em;}th{font-weight:bold;text-align:center;}caption{margin-bottom:.5em;text-align:center;}p,fieldset,table,pre{margin-bottom:1em;}input[type=text],input[type=password],textarea{width:12.25em;*width:11.9em;}
+</style><meta name="author" content="fab&amp;jo">
+    <meta name="description" content="Mini chat 4 friends">
+    <meta name="generator" content="BlueGriffon wysiwyg editor">
+  </head>
+  <body onload="appInit()">
+    <div id="doc3" class="yui-t1">
+      <div id="hd">
+        <h1>Tchôt! </h1>
+      </div>
+      <div id="bd">
+        <div id="yui-main">
+          <div class="yui-b">
+            <div class="yui-gf">
+              <div class="yui-u first" id="all_nicks" onclick="userListClicked(this)">
+              </div>                                                                                                                                                
+              <div class="yui-u" id="all_texts">
+                <p>Chat log here:</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="yui-b" id="all_channels" onclick="channelListClicked(this)"></div>
+      </div>
+      <div id="ft"> <input id="input_text" name="user_text" placeholder="Type your text here and press ENTER"
+          autocomplete="off" type="text"> </div>
+    </div>
+    <script>
+        const login="{{user}}";
+        const password="{{password}}";
+        const host="{{host}}";
+        const rooms=new Set({{!all_rooms}});
+        const users=new Set({{!all_users}});
+    </script>
+    <script src="/static/mqtt.min.js" charset="utf-8"></script>
+    <script src="/static/code.js"></script>
+  </body>
+</html>

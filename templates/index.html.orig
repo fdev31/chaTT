@@ -3,17 +3,47 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>ChaTT</title>
-    <link href="https://fonts.googleapis.com/css?family=Chilanka&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
+<<<<<<< HEAD
+    <script src="/static/js/mqtt.min.js" charset="utf-8"></script>
+    <script src="/static/js/code.js"></script>
+||||||| merged common ancestors
+    <script src="/static/mqtt.min.js" charset="utf-8"></script>
+    <script src="/static/code.js"></script>
+    <style type="text/css">
+html {
+  color: black;
+  background: white url("/static/background.jpg") no-repeat fixed 0% 0%;
+}
+=======
+    <script src="/static/mqtt.min.js" charset="utf-8"></script>
+    <script src="/static/code.js"></script>
+    <style type="text/css">
+html {
+  color: black;
+  background-color: #5d7d45;
+<!--  background: white url("/static/background.jpg") no-repeat fixed 0% 0%;-->
+}
+
+span.nick {
+  font-weight: bold;
+  margin-right: 1ex;
+  margin-left: 0.5ex;
+}
+
+span.text {
+  color: #333;
+}
+>>>>>>> add some css
+
     <link rel="stylesheet" href='static/css/style.css' >
 <meta name="author" content="fab&amp;jo">
     <meta name="description" content="Mini chat 4 friends">
     <meta name="generator" content="BlueGriffon wysiwyg editor">
   </head>
-  <body onload="app.init()">
+  <body onload="appInit()">
     <div id="doc3" class="yui-t1">
       <div id="hd">
-        <h1 id="title">Tchôt! </h1>
+        <h1>Tchôt! </h1>
         <div class="mainframe" style="width: 100%">
             <div style="width: 100px; float: left;" id="all_rooms" onclick="roomListClicked(this)"></div>
             <div style="margin-left: 0px; width: 100px; float: left;" id="all_nicks"></div>
@@ -24,18 +54,16 @@
           autocomplete="off" type="text"> </div>
       <div>
           <p>
-          <button onclick="app.createRoom()"><span class="svgIcon" id="room_icon" title="add_room" /></button>
-          <button onclick="app.enableAudio()"><span class="svgIcon" id="sound_icon" title="sound" /></button>
+          <button onclick="createroom()">New room</button>
           </p>
       </div>
     </div>
     <script>
+        const login="{{user}}";
+        const password="{{password}}";
         const host="{{host}}";
         const rooms=new Set({{!all_rooms}});
         const users=new Set({{!all_users}});
-        const ipAddr="{{!ip_addr}}";
-        const messagesLog={{!all_messages}};
     </script>
-    <script src="/static/js/main.js"></script>
   </body>
 </html>
