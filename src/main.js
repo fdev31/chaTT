@@ -69,8 +69,6 @@ function drawUsers() {
         .join('');
 }
 
-let _thumbnailMaxHeight;
-
 function thumbnailClicked(elt) {
     if (!!elt['data-max-height']) {
         elt.style['max-height'] = elt['data-max-height'];
