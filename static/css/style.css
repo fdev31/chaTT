@@ -427,6 +427,9 @@ body {
   box-shadow: inset 0 0 10px #000;
   border: none;
   font-family: 'Chilanka', cursive;
+  background-color: #948c8c;
+  color: #1c1414;
+  font-weight: bold;
 }
 #all_texts {
    overflow-y:auto;
