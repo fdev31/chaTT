@@ -32,11 +32,14 @@ span.nick {
 span.text {
   color: #ddd;
   font-family: 'Chilanka', cursive;
+  font-size: 130%;
 }
 
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td {
   margin: 0px;
   padding: 0px;
+  font-family: 'Noto Sans', sans-serif;
+
 }
 
 table {
@@ -417,6 +420,7 @@ body {
    max-height: 60ex;
 }
 #all_nicks, #all_rooms {
+   padding: .4ex;
    cursor: pointer;
    overflow-y:auto;
    max-height: 60ex;
