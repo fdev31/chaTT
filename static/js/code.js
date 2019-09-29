@@ -6,6 +6,34 @@ let client = null;
 
 const userColors = '#fabebe #ffd8b1 #fffac8 #aaffc3 #e6beff #ffffff #808080 #e6194b #f58231 #ffe119 #bcf60c #3cb44b #4363D8 #911eb4 #f032e6 #808080'.split(' ');
 
+let ICONS_STATES = {
+    sound_icon : {
+        hover: {
+            rect4525: {d:'m 5.2683039,291.09663 c 0.2072621,-0.20725 0.5409829,-0.20725 0.7482373,0 l 2.2447171,2.24472 c 0.2072657,0.20727 0.2072606,0.54097 -1.4e-6,0.74824 -0.2072621,0.20725 -0.5409716,0.20727 -0.7482373,0 l -2.2447171,-2.24472 c -0.2072543,-0.20726 -0.2072607,-0.54097 1.4e-6,-0.74824 z'},
+            rect4527: {'d': 'm 8.2421792,291.09659 c 0.2072621,0.20727 0.2072557,0.54098 1.4e-6,0.74824 l -2.2447171,2.24472 c -0.2072657,0.20727 -0.5409752,0.20725 -0.7482373,0 -0.207262,-0.20727 -0.2072671,-0.54097 -1.4e-6,-0.74824 l 2.2447171,-2.24472 c 0.2072544,-0.20725 0.5409752,-0.20725 0.7482373,0 z'}
+        },
+        on: {
+            rect4525: {'d': 'm 7.5140723,290.1303 c 0.2628127,1e-5 0.474402,0.2116 0.4744017,0.47441 l -3.9e-6,4.09089 c -3e-7,0.26282 -0.211581,0.47439 -0.4744022,0.4744 -0.2628127,-1e-5 -0.474402,-0.21158 -0.4744017,-0.47441 l 3.9e-6,-4.09089 c 3e-7,-0.26281 0.211581,-0.47439 0.4744022,-0.4744 z'},
+            rect4527: {'d': 'm 6.1133416,291.13855 c 0.2191871,0 0.3956408,0.17646 0.3956411,0.39564 l 3.3e-6,2.37385 c 3e-7,0.21919 -0.1764607,0.39564 -0.3956408,0.39564 -0.2191871,0 -0.3956408,-0.17645 -0.3956411,-0.39564 l -3.2e-6,-2.37385 c -3e-7,-0.21918 0.1764606,-0.39564 0.3956407,-0.39564 z'}
+        },
+        off: {
+            rect4525: {'d': 'm 5.6433321,291.6021 c 0.1549875,-0.15498 0.4045368,-0.15498 0.5595205,0 l 1.6785654,1.67857 c 0.1549908,0.15499 0.1549864,0.40453 -1e-6,0.55952 -0.1549875,0.15498 -0.4045298,0.15499 -0.5595205,0 l -1.6785654,-1.67857 c -0.1549837,-0.15498 -0.1549864,-0.40453 1e-6,-0.55952 z'},
+            rect4527: {'d': 'm 7.867151,291.60207 c 0.1549874,0.15499 0.1549847,0.40454 1e-6,0.55952 l -1.6785654,1.67857 c -0.1549907,0.15499 -0.404533,0.15498 -0.5595205,0 -0.1549874,-0.15499 -0.1549918,-0.40453 -1e-6,-0.55952 l 1.6785654,-1.67857 c 0.1549837,-0.15498 0.404533,-0.15498 0.5595205,0 z'}
+        }
+    },
+    room_icon: {
+        hover: {
+            rect4975: {'width': 6.8, x: 1.058},
+            rect4979: {'width': 6.8, x: -295.94},
+        },
+        reset: {
+            rect4975: {'width': 4.23, x: 2.11},
+            rect4979: {'width': 4.23, x: -294.6},
+        }
+    }
+}
+ICONS_STATES.sound_icon.reset = ICONS_STATES.sound_icon.off;
+
 const activeSession = {
     userName: 'NoName',
     currentRoom: 'main'
@@ -266,11 +294,20 @@ class IconManager {
          * <span class="svgIcon" id="sound_icon" name="sound_off" />
          * - keeps the id attribute untouched & forces "svgIcon" class
          */
-        document.querySelectorAll('.svgIcon').forEach(
-            (elt) => elt.outerHTML = `<object class="svgIcon" id="${elt.attributes.id.value}" type="image/svg+xml" data="static/img/icons/${elt.attributes.title.value}.svg"></object>`
+        this.current_states = {};
+        document.querySelectorAll('.svgIcon').forEach( (elt)=> {
+            elt.parentElement.onmouseover = ()=> iconManager.changeState(elt.attributes.id.value, 'hover');
+            elt.parentElement.onmouseleave = ()=> iconManager.changeState(elt.attributes.id.value); // no state == reset to last state
+            elt.outerHTML = `<object class="svgIcon" id="${elt.attributes.id.value}" type="image/svg+xml" data="static/img/icons/${elt.attributes.title.value}.svg"></object>`
+        }
         );
     }
     changeState(icon, state) {
+        if (state == undefined) {
+            state = this.current_states[icon] || 'reset';
+        } else if (state != 'hover') { // hover is not a real state, it's "transient"
+            this.current_states[icon] = state;
+        }
         const elt = Snap(document.getElementById(icon));
         const states = this.icon_states[icon][state];
         for (const k of Object.keys(states)) {
@@ -279,28 +316,7 @@ class IconManager {
     }
 }
 
-IconManager.prototype.icon_states = {
-    sound_icon : {
-        on: {
-            rect4525: {'d': 'm 7.5140723,290.1303 c 0.2628127,1e-5 0.474402,0.2116 0.4744017,0.47441 l -3.9e-6,4.09089 c -3e-7,0.26282 -0.211581,0.47439 -0.4744022,0.4744 -0.2628127,-1e-5 -0.474402,-0.21158 -0.4744017,-0.47441 l 3.9e-6,-4.09089 c 3e-7,-0.26281 0.211581,-0.47439 0.4744022,-0.4744 z'},
-            rect4527: {'d': 'm 6.1133416,291.13855 c 0.2191871,0 0.3956408,0.17646 0.3956411,0.39564 l 3.3e-6,2.37385 c 3e-7,0.21919 -0.1764607,0.39564 -0.3956408,0.39564 -0.2191871,0 -0.3956408,-0.17645 -0.3956411,-0.39564 l -3.2e-6,-2.37385 c -3e-7,-0.21918 0.1764606,-0.39564 0.3956407,-0.39564 z'}
-        },
-        off: {
-            rect4525: {'d': 'm 5.6433321,291.6021 c 0.1549875,-0.15498 0.4045368,-0.15498 0.5595205,0 l 1.6785654,1.67857 c 0.1549908,0.15499 0.1549864,0.40453 -1e-6,0.55952 -0.1549875,0.15498 -0.4045298,0.15499 -0.5595205,0 l -1.6785654,-1.67857 c -0.1549837,-0.15498 -0.1549864,-0.40453 1e-6,-0.55952 z'},
-            rect4527: {'d': 'm 7.867151,291.60207 c 0.1549874,0.15499 0.1549847,0.40454 1e-6,0.55952 l -1.6785654,1.67857 c -0.1549907,0.15499 -0.404533,0.15498 -0.5595205,0 -0.1549874,-0.15499 -0.1549918,-0.40453 -1e-6,-0.55952 l 1.6785654,-1.67857 c 0.1549837,-0.15498 0.404533,-0.15498 0.5595205,0 z'}
-        }
-    },
-    room_icon: {
-        hover: {
-            rect4975: {'width': 6.8, x: 1.058},
-            rect4979: {'width': 6.8, x: -295.94},
-        },
-        reset: {
-            rect4975: {'width': 4.23, x: 2.11},
-            rect4979: {'width': 4.23, x: -294.6},
-        }
-    }
-}
+IconManager.prototype.icon_states = ICONS_STATES;
 
 function enableAudio() {
     if (activeSession.bellSound.volume == 0.0) {
