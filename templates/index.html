@@ -23,8 +23,8 @@
           autocomplete="off" type="text"> </div>
       <div>
           <p>
-          <button onclick="createRoom()">New room</button>
-          <button onclick="enableAudio(); this.remove();">Unmute</button>
+          <button onclick="createRoom()" onmouseover="iconManager.changeState('room_icon', 'hover')" onmouseleave="iconManager.changeState('room_icon', 'reset')"><span class="svgIcon" id="room_icon" title="add_room" /></button>
+          <button onclick="enableAudio()"><span class="svgIcon" id="sound_icon" title="sound" /></button>
           </p>
       </div>
     </div>
@@ -37,6 +37,7 @@
     </script>
     <script src="/static/js/mqtt.min.js" charset="utf-8"></script>
     <script src="/static/js/randgen.js"></script>
+    <script src="/static/js/snap.svg-min.js"></script>
     <script src="/static/js/code.js"></script>
   </body>
 </html>

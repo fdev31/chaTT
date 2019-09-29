@@ -204,6 +204,7 @@ function _refreshMessageLog(room, payload) {
 
 // DOM callbacks
 const dom = {}
+let iconManager = null;
 
 function appInit() {
     // install ENTER handler for the input
@@ -253,15 +254,66 @@ function appInit() {
         drawMessages();
         focusInput();
         console.log('init finished.');
+        iconManager = new IconManager();
     });
     client.on('message', messageArrived);
 }
 
+
+class IconManager {
+    constructor() {
+        /** replace all .svgIcon with the real svg icon base on the name, eg:
+         * <span class="svgIcon" id="sound_icon" name="sound_off" />
+         * - keeps the id attribute untouched & forces "svgIcon" class
+         */
+        document.querySelectorAll('.svgIcon').forEach(
+            (elt) => elt.outerHTML = `<object class="svgIcon" id="${elt.attributes.id.value}" type="image/svg+xml" data="static/img/icons/${elt.attributes.title.value}.svg"></object>`
+        );
+    }
+    changeState(icon, state) {
+        const elt = Snap(document.getElementById(icon));
+        const states = this.icon_states[icon][state];
+        for (const k of Object.keys(states)) {
+            elt.select('#'+k).animate(states[k], 200);
+        }
+    }
+}
+
+IconManager.prototype.icon_states = {
+    sound_icon : {
+        on: {
+            rect4525: {'d': 'm 7.5140723,290.1303 c 0.2628127,1e-5 0.474402,0.2116 0.4744017,0.47441 l -3.9e-6,4.09089 c -3e-7,0.26282 -0.211581,0.47439 -0.4744022,0.4744 -0.2628127,-1e-5 -0.474402,-0.21158 -0.4744017,-0.47441 l 3.9e-6,-4.09089 c 3e-7,-0.26281 0.211581,-0.47439 0.4744022,-0.4744 z'},
+            rect4527: {'d': 'm 6.1133416,291.13855 c 0.2191871,0 0.3956408,0.17646 0.3956411,0.39564 l 3.3e-6,2.37385 c 3e-7,0.21919 -0.1764607,0.39564 -0.3956408,0.39564 -0.2191871,0 -0.3956408,-0.17645 -0.3956411,-0.39564 l -3.2e-6,-2.37385 c -3e-7,-0.21918 0.1764606,-0.39564 0.3956407,-0.39564 z'}
+        },
+        off: {
+            rect4525: {'d': 'm 5.6433321,291.6021 c 0.1549875,-0.15498 0.4045368,-0.15498 0.5595205,0 l 1.6785654,1.67857 c 0.1549908,0.15499 0.1549864,0.40453 -1e-6,0.55952 -0.1549875,0.15498 -0.4045298,0.15499 -0.5595205,0 l -1.6785654,-1.67857 c -0.1549837,-0.15498 -0.1549864,-0.40453 1e-6,-0.55952 z'},
+            rect4527: {'d': 'm 7.867151,291.60207 c 0.1549874,0.15499 0.1549847,0.40454 1e-6,0.55952 l -1.6785654,1.67857 c -0.1549907,0.15499 -0.404533,0.15498 -0.5595205,0 -0.1549874,-0.15499 -0.1549918,-0.40453 -1e-6,-0.55952 l 1.6785654,-1.67857 c 0.1549837,-0.15498 0.404533,-0.15498 0.5595205,0 z'}
+        }
+    },
+    room_icon: {
+        hover: {
+            rect4975: {'width': 6.8, x: 1.058},
+            rect4979: {'width': 6.8, x: -295.94},
+        },
+        reset: {
+            rect4975: {'width': 4.23, x: 2.11},
+            rect4979: {'width': 4.23, x: -294.6},
+        }
+    }
+}
+
 function enableAudio() {
     if (activeSession.bellSound.volume == 0.0) {
+        iconManager.changeState('sound_icon', 'on')
         activeSession.bellSound.volume = 1.0;
-        activeSession.bellSound.play();
-        globEvents.on('messageArrived', () => activeSession.bellSound.play());
+        if (activeSession.unlockedAudio == undefined) {
+            activeSession.bellSound.play();
+            globEvents.on('messageArrived', () => activeSession.bellSound.play());
+            activeSession.unlockedAudio = true;
+        }
+    } else {
+        iconManager.changeState('sound_icon', 'off')
+        activeSession.bellSound.volume = 0.0;
     }
 }
 

@@ -4,6 +4,13 @@ html {
   background: white url("/static/img/background.jpg") no-repeat fixed 0% 0%;
   font-size: 150%;
 }
+button > * {
+  pointer-events: none;
+}
+
+.svgIcon {
+    width: 24px;
+}
 
 .thumbnail {
     transition-duration: 1s;
