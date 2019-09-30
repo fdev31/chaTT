@@ -5,8 +5,8 @@
   "main": "test.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "parcel watch -d static/js/ --public-url . src/main.js",
-    "build": "parcel build -d static/js/ --public-url . src/main.js"
+    "build": "parcel build -d static/js/ --public-url . src/main.js",
+    "dev": "parcel build --no-minify -d static/js/ --public-url . src/main.js"
   },
   "repository": {
     "type": "git",
