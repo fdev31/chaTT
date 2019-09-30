@@ -1,7 +1,6 @@
 "use strict"
 
 import './libs/snap.svg-min.js';
-import {connect} from './libs/mqtt.min.js';
 import {makeRandomPair} from './randgen.js';
 import {thumbnailClicked, recalcLayout} from './domapi.js';
 
@@ -10,9 +9,9 @@ import {iconManager} from './iconManager.js';
 import {renderCommands} from './commands.js';
 import {get} from './request.js';
 
-const maxMessages = 50;
+import * as mqtt from './mqttUtils.js';
 
-let client = null;
+const maxMessages = 50;
 
 const activeSession = {
     userName: 'NoName',
@@ -84,15 +83,12 @@ function drawMessages() {
     elt.scrollTop = elt.scrollHeight;
 }
 
-function publish(topic, payload, opts) {
-    return client.publish(topic, payload?JSON.stringify(payload):payload, opts);
-}
 
 function sendText(keypress) {
     if (keypress.code == 'Enter') {
         const text = dom.input.value;
         const payload = {'author': activeSession.userName, 'text': text};
-        publish(`rooms/${activeSession.currentRoom}/newtext`, payload, {qos: 1, retain: false});
+        mqtt.publish(`rooms/${activeSession.currentRoom}/newtext`, payload, {qos: 1, retain: false});
         dom.input.value = '';
     }
 }
@@ -171,23 +167,14 @@ function appInit() {
 
     // setup the Mqtt client
     const [mqttProto, mqttPort] = document.location.href.match(/^https/)?['wss',9001]:['ws',9001];
-    if (login)
-        client = connect(`${mqttProto}://${login}:${password}@${host}:${mqttPort}`);
-    else
-        client = connect(`${mqttProto}://${host}:${mqttPort}`);
-    client.on('error', (err) => {
-        client.options.reconnectPeriod = 0;
-        console.log('err', err);
-        alert('failed.');
-    });
-    client.on('connect', () => {
-        publish(`users/${activeSession.userName}/hello`, {'ipAddress': ipAddr});
-        client.subscribe("rooms/#", (err) => {err && console.log('Error', err)} );
-        client.subscribe("users/#", (err) => {err && console.log('Error', err)} );
+    const onConnect = function() {
+        mqtt.publish(`users/${activeSession.userName}/hello`, {'ipAddress': ipAddr});
+        mqtt.subscribe("rooms/#");
+        mqtt.subscribe("users/#");
         focusInput();
         console.log('init finished.');
-    });
-    client.on('message', messageArrived);
+    }
+    mqtt.init(login?`${mqttProto}://${login}:${password}@${host}:${mqttPort}`:`${mqttProto}://${host}:${mqttPort}`, onConnect, messageArrived);
 
     activeSession.bellSound = new Audio('/static/snd/bell.mp3');
     activeSession.bellSound.volume = 0.0;
@@ -250,7 +237,7 @@ function createRoom() {
         alert('Invalid room name!');
         return;
     }
-    publish(`rooms/${roomName.replace(/[+]/g, '&gt;')}/new`);
+    mqtt.publish(`rooms/${roomName.replace(/[+]/g, '&gt;')}/new`);
 }
 
 // used in the template, global functions
