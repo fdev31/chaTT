@@ -33,6 +33,8 @@ USER_IDLE_DELAY= 10*60 # 10 minutes
 
 debouncer = debounce.Debouncer()
 
+AUTHOR_WHITELIST = set(['bot'])
+
 class IdleMarker(threading.Thread):
     running = True
     def run(self):
@@ -46,13 +48,14 @@ class IdleMarker(threading.Thread):
                 for author in list(authors):
                     info = authors_info.get(author)
                     if info == None or now - info.get('last_seen', 0) > USER_IDLE_DELAY:
-                        authors.remove(author)
-                        print("Removing %s"%author)
-                        mqtt_pub('users/%s/logout'%author)
-                        publish_users()
+                        if author not in AUTHOR_WHITELIST:
+                            authors.remove(author)
+                            print("Removing %s"%author)
+                            mqtt_pub('users/%s/logout'%author)
+                            publish_users()
 
-authors = set()
-channels = set()
+authors = set(['bot'])
+channels = set(['main'])
 messages = dict()
 
 authors_info = dict()
