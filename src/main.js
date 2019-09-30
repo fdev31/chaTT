@@ -184,8 +184,6 @@ function appInit() {
     });
     client.on('connect', () => {
         publish(`users/${activeSession.userName}/hello`, {'ipAddress': ipAddr});
-        activeSession.bellSound = new Audio('/static/snd/bell.mp3');
-        activeSession.bellSound.volume = 0.0;
         client.subscribe("rooms/#", (err) => {err && console.log('Error', err)} );
         client.subscribe("users/#", (err) => {err && console.log('Error', err)} );
         drawMessages();
@@ -193,6 +191,9 @@ function appInit() {
         console.log('init finished.');
     });
     client.on('message', messageArrived);
+
+    activeSession.bellSound = new Audio('/static/snd/bell.mp3');
+    activeSession.bellSound.volume = 0.0;
 }
 
 function enableAudio() {
