@@ -21,6 +21,8 @@ function init(url, onConnect, onMessage) {
         console.log('mqtt init err', err);
         alert('failed.');
     });
+    client.on('connect', onConnect);
+    client.on('message', onMessage);
     return client;
 }
 
