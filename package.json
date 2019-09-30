@@ -5,8 +5,8 @@
   "main": "test.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "parcel watch -d static/js/ src/main.js",
-    "build": "parcel build -d static/js/ src/main.js"
+    "dev": "parcel watch -d static/js/ --public-url . src/main.js",
+    "build": "parcel build -d static/js/ --public-url . src/main.js"
   },
   "repository": {
     "type": "git",
@@ -23,9 +23,6 @@
     "parcel-bundler": "^1.12.3"
   },
   "dependencies": {
-    "eve": "^0.5.4",
-    "libs": "^0.1.2",
-    "snap": "^1.1.0",
-    "static": "^2.0.0"
+    "eve": "^0.5.4"
   }
 }
