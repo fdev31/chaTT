@@ -191,6 +191,7 @@ function appInit() {
 
     activeSession.bellSound = new Audio('/static/snd/bell.mp3');
     activeSession.bellSound.volume = 0.0;
+
     get('/data/lastinfo').then( (data) => {
         for (const r of data.rooms) {
             rooms.add(r);
@@ -198,8 +199,8 @@ function appInit() {
         for (const u of data.users) {
             users.add(u);
         }
-        for (const [k,v] of data.messages.entries()) {
-            messagesLog[k] = v;
+        for (const r in data.messages) {
+            messagesLog[r] = data.messages[r];
         }
         drawRooms();
         drawUsers();

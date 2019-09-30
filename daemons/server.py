@@ -48,7 +48,7 @@ def static_files(name):
 def cb():
     return {'users': list(KNOWN_USERS),
             'rooms': list(KNOWN_ROOMS),
-            'messages': list(MESSAGES)
+            'messages': MESSAGES
             }
 
 # main template, includes current data
