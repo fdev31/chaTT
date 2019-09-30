@@ -14,8 +14,8 @@ from bottle import route, run, template
 STATIC_FILES_PATH = os.path.join(os.path.abspath(os.path.curdir), 'static')
 assert( os.path.exists('README.rst') )
 
-KNOWN_ROOMS = set()
-KNOWN_USERS = set()
+KNOWN_ROOMS = set(['main'])
+KNOWN_USERS = set(['bot'])
 MESSAGES = dict()
 
 # http routing
@@ -44,19 +44,21 @@ def cb():
 def static_files(name):
     return bottle.static_file(name, STATIC_FILES_PATH)
 
+@bottle.get('/data/lastinfo')
+def cb():
+    return {'users': list(KNOWN_USERS),
+            'rooms': list(KNOWN_ROOMS),
+            'messages': list(MESSAGES)
+            }
+
 # main template, includes current data
 
 @bottle.get('/')
 def index():
-    known_users = list(KNOWN_USERS)
-    known_rooms = list(KNOWN_ROOMS)
     ip_addr = bottle.request.environ.get('HTTP_X_FORWARDED_FOR', '')
     return template('./templates/index.html',
             host=HOST,
             ip_addr=ip_addr,
-            all_users=json.dumps(known_users),
-            all_rooms=json.dumps(known_rooms),
-            all_messages=json.dumps(MESSAGES),
             )
 
 if __name__ == "__main__":

@@ -8,6 +8,7 @@ import {thumbnailClicked, recalcLayout} from './domapi.js';
 import {userColors} from './ui_styling.js';
 import {iconManager} from './iconManager.js';
 import {renderCommands} from './commands.js';
+import {get} from './request.js';
 
 const maxMessages = 50;
 
@@ -156,9 +157,6 @@ function appInit() {
     window.onresize = recalcLayout;
     recalcLayout();
 
-    drawRooms();
-    drawUsers();
-
     activeSession.userName = prompt('Nick name');
 
     globEvents.init('messageArrived');
@@ -186,7 +184,6 @@ function appInit() {
         publish(`users/${activeSession.userName}/hello`, {'ipAddress': ipAddr});
         client.subscribe("rooms/#", (err) => {err && console.log('Error', err)} );
         client.subscribe("users/#", (err) => {err && console.log('Error', err)} );
-        drawMessages();
         focusInput();
         console.log('init finished.');
     });
@@ -194,6 +191,20 @@ function appInit() {
 
     activeSession.bellSound = new Audio('/static/snd/bell.mp3');
     activeSession.bellSound.volume = 0.0;
+    get('/data/lastinfo').then( (data) => {
+        for (const r of data.rooms) {
+            rooms.add(r);
+        }
+        for (const u of data.users) {
+            users.add(u);
+        }
+        for (const [k,v] of data.messages.entries()) {
+            messagesLog[k] = v;
+        }
+        drawRooms();
+        drawUsers();
+        drawMessages();
+    });
 }
 
 function enableAudio() {

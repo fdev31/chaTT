@@ -30,11 +30,11 @@
       </div>
     </div>
     <script>
-        const host="{{host}}";
-        const rooms=new Set({{!all_rooms}});
-        const users=new Set({{!all_users}});
+        const host="{{host}}"; // TODO: replace with some instrospection of the location
+        const rooms=new Set();
+        const users=new Set();
         const ipAddr="{{!ip_addr}}";
-        const messagesLog={{!all_messages}};
+        const messagesLog={};
     </script>
     <script src="/static/js/main.js"></script>
   </body>
