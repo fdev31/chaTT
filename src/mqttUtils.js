@@ -7,7 +7,7 @@ function publish(topic, payload, opts) {
 }
 
 function onError(err) {
-    console.log("MQTT Error:", err);
+    if (err) console.log("MQTT Error:", err);
 }
 
 function subscribe(topic) {
