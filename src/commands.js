@@ -12,7 +12,7 @@ commands.https = commands.http;
 
 const _genericCommandRe = ':([a-z]{2,10}):(?:[(](.*)[)])?';
 const _urlRe = '(https?)://([^   \n]+)';
-const commandsPattern = new RegExp(`(?:${_genericCommandRe})|(?:${_urlRe})`);
+let commandsPattern = `(?:${_genericCommandRe})|(?:${_urlRe})`
 
 function commandsProcessor(...args) {
     // get the result of a regex match and return the matching command result
@@ -33,4 +33,9 @@ function renderCommands(text) {
     return text;
 }
 
-module.exports = {renderCommands};
+function init(nickname) {
+    commandsPattern = new RegExp(commandsPattern + `|(?:(@${nickname})(.*))`);
+    commands[`@${nickname}`] = (me, text) => `<b>${me} ${text}</b>`;
+}
+
+module.exports = {renderCommands, init};

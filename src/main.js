@@ -6,7 +6,7 @@ import {thumbnailClicked, recalcLayout} from './domapi.js';
 
 import {userColors} from './ui_styling.js';
 import {iconManager} from './iconManager.js';
-import {renderCommands} from './commands.js';
+import {init as initCommands, renderCommands} from './commands.js';
 import {get} from './request.js';
 
 import * as mqtt from './mqttUtils.js';
@@ -153,6 +153,7 @@ function appInit() {
     recalcLayout();
 
     activeSession.userName = prompt('Nick name');
+    initCommands(activeSession.userName);
 
     globEvents.init('messageArrived');
     globEvents.init('messageEmitted');
