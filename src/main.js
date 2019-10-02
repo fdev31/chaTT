@@ -85,88 +85,85 @@ function _refreshMessageLog(room, payload) {
     messagesLog[room].push([payload.author, payload.text]);
 }
 
-function appInit() {
-    domInit();
-    dom.input.addEventListener('keydown', sendText);
-    let passphrase = prompt('challenge:') || false;
-    const [login, password] = passphrase ? makeRandomPair(passphrase):[false, false];
-    passphrase = undefined;
-    document.getElementById('title').textContent = `ChaTT-${login?login.slice(3, 5):'unprotected'}`;
-    window.onresize = recalcLayout;
-    recalcLayout();
-
-    activeSession.userName = prompt('Nick name');
-    initCommands(activeSession.userName);
-
-    globEvents.init('messageArrived');
-    globEvents.init('messageEmitted');
-    globEvents.init('userAdded');
-    globEvents.init('channelAdded');
-
-    // setup UI redraw
-    globEvents.on('userAdded', drawUsers);
-    globEvents.on('channelAdded', drawRooms);
-    globEvents.on(['messageArrived', 'messageEmitted'], (room, payload) => {if (room == activeSession.currentRoom) drawMessages()});
-
-    // setup the Mqtt client
-    const [mqttProto, mqttPort] = document.location.href.match(/^https/)?['wss',9001]:['ws',9001];
-    const onConnect = function() {
-        mqtt.publish(`users/${activeSession.userName}/hello`, {'ipAddress': ipAddr});
-        mqtt.subscribe("rooms/#");
-        mqtt.subscribe("users/#");
-        console.log('init finished.');
-    }
-    mqtt.init(login?`${mqttProto}://${login}:${password}@${host}:${mqttPort}`:`${mqttProto}://${host}:${mqttPort}`, onConnect, messageArrived);
-
-    activeSession.bellSound = new Audio('/static/snd/bell.mp3');
-    activeSession.bellSound.volume = 0.0;
-
-    get('/data/lastinfo').then( (data) => {
-        for (const r of data.rooms) {
-            rooms.add(r);
-        }
-        for (const u of data.users) {
-            users.add(u);
-        }
-        for (const r in data.messages) {
-            messagesLog[r] = data.messages[r];
-        }
-        drawRooms();
-        drawUsers();
-        drawMessages();
-    });
+function onConnect() {
+    mqtt.publish(`users/${activeSession.userName}/hello`, {'ipAddress': ipAddr});
+    mqtt.subscribe("rooms/#");
+    mqtt.subscribe("users/#");
+    console.log('init finished.');
 }
 
-function enableAudio() {
-    if (activeSession.bellSound.volume == 0.0) {
-        iconManager.changeState('sound_icon', 'on')
-        activeSession.bellSound.volume = 1.0;
-        if (activeSession.unlockedAudio == undefined) {
-            activeSession.bellSound.play();
-            globEvents.on('messageArrived', () => activeSession.bellSound.play());
-            activeSession.unlockedAudio = true;
-        }
-    } else {
-        iconManager.changeState('sound_icon', 'off')
-        activeSession.bellSound.volume = 0.0;
+function onLastData(data) {
+    for (const r of data.rooms) {
+        rooms.add(r);
     }
-}
-
-function createRoom() {
-    const roomName = prompt('Room name');
-    if (! roomName.match(/^[a-zA-Z0-9-]+$/)) {
-        alert('Invalid room name!');
-        return;
+    for (const u of data.users) {
+        users.add(u);
     }
-    mqtt.publish(`rooms/${roomName.replace(/[+]/g, '&gt;')}/new`);
+    for (const r in data.messages) {
+        messagesLog[r] = data.messages[r];
+    }
+    drawRooms();
+    drawUsers();
+    drawMessages();
 }
 
 // used in the template, global functions
 
 window.app = {
-    init: appInit,
-    createRoom,
-    enableAudio,
+    init: () => {
+        domInit();
+        dom.input.addEventListener('keydown', sendText);
+        let passphrase = prompt('challenge:') || false;
+        const [login, password] = passphrase ? makeRandomPair(passphrase):[false, false];
+        passphrase = undefined;
+        document.getElementById('title').textContent = `ChaTT-${login?login.slice(3, 5):'unprotected'}`;
+        window.onresize = recalcLayout;
+        recalcLayout();
+
+        activeSession.userName = prompt('Nick name');
+        initCommands(activeSession.userName);
+
+        globEvents.init('messageArrived');
+        globEvents.init('messageEmitted');
+        globEvents.init('userAdded');
+        globEvents.init('channelAdded');
+
+        // setup UI redraw
+        globEvents.on('userAdded', drawUsers);
+        globEvents.on('channelAdded', drawRooms);
+        globEvents.on(['messageArrived', 'messageEmitted'], (room, payload) => {if (room == activeSession.currentRoom) drawMessages()});
+
+        // setup the Mqtt client
+        const [mqttProto, mqttPort] = document.location.href.match(/^https/)?['wss',9001]:['ws',9001];
+        mqtt.init(login?`${mqttProto}://${login}:${password}@${host}:${mqttPort}`:`${mqttProto}://${host}:${mqttPort}`, onConnect, messageArrived);
+
+        activeSession.bellSound = new Audio('/static/snd/bell.mp3');
+        activeSession.bellSound.volume = 0.0;
+
+        get('/data/lastinfo').then( onLastData );
+    },
+    enableAudio: () => {
+        if (activeSession.bellSound.volume == 0.0) {
+            iconManager.changeState('sound_icon', 'on')
+            activeSession.bellSound.volume = 1.0;
+            if (activeSession.unlockedAudio == undefined) {
+                activeSession.bellSound.play();
+                globEvents.on('messageArrived', () => activeSession.bellSound.play());
+                activeSession.unlockedAudio = true;
+            }
+        } else {
+            iconManager.changeState('sound_icon', 'off')
+            activeSession.bellSound.volume = 0.0;
+        }
+    },
+    createRoom: () => {
+        const roomName = prompt('Room name');
+        if (! roomName.match(/^[a-zA-Z0-9-]+$/)) {
+            alert('Invalid room name!');
+            return;
+        }
+        mqtt.publish(`rooms/${roomName.replace(/[+]/g, '&gt;')}/new`);
+    },
     userListClicked: (elt) => {
         dom.input.value += `@${elt.childNodes[0].data}: `;
         dom.input.focus();
