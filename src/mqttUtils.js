@@ -1,4 +1,4 @@
-import {connect} from './libs/mqtt.min.js';
+import {connect} from 'mqtt';
 
 let client = null;
 

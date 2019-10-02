@@ -1,6 +1,6 @@
 "use strict"
 
-import './libs/snap.svg-min.js';
+import 'snapsvg';
 import {makeRandomPair} from './randgen.js';
 import {thumbnailClicked, recalcLayout} from './domapi.js';
 
@@ -82,7 +82,6 @@ function drawMessages() {
     elt.innerHTML = newContent;
     elt.scrollTop = elt.scrollHeight;
 }
-
 
 function sendText(keypress) {
     if (keypress.code == 'Enter') {
