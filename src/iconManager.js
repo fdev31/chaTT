@@ -1,3 +1,4 @@
+import 'snapsvg';
 import {ICONS_STATES} from './ui_styling.js';
 
 class IconManager {

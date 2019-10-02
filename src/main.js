@@ -1,86 +1,35 @@
 "use strict"
 
-import 'snapsvg';
+import {dom, selectRoom,
+    drawRooms as _drawRooms,
+    drawUsers as _drawUsers,
+    drawMessages as _drawMessages,
+    init as domInit} from './ui_dom_elts.js';
 import {makeRandomPair} from './randgen.js';
 import {thumbnailClicked, recalcLayout} from './domapi.js';
-
+import {globEvents} from './ui_events.js';
 import {userColors} from './ui_styling.js';
 import {iconManager} from './iconManager.js';
-import {init as initCommands, renderCommands} from './commands.js';
+import {init as initCommands} from './commands.js';
 import {get} from './request.js';
-
 import * as mqtt from './mqttUtils.js';
+
+function drawRooms() {
+    return _drawRooms(rooms, activeSession.currentRoom)
+}
+function drawUsers() {
+    return _drawUsers(activeSession.userName, users, userColors)
+}
+function drawMessages() {
+    return _drawMessages(messagesLog[activeSession.currentRoom], _nickNamesPalette)
+}
+const _nickNamesPalette = (user) => userColors[Array.from(users).indexOf(user)]
 
 const maxMessages = 50;
 
 const activeSession = {
     userName: 'NoName',
     currentRoom: 'main'
-}
-
-const globEvents = {
-    init: (name) => {
-        globEvents[name] = new Set();
-    },
-    emit: (name, ...args) => {
-        for (const handler of globEvents[name]) {
-            try {
-                handler(...args);
-            } catch (e) {
-                console.error(`Emit ${name}: ${e}`);
-            }
-        }
-    },
-    on: (name_or_list, handler) => {
-        const nameList = typeof name_or_list == 'string' ? [name_or_list] : name_or_list;
-        for (const name of nameList)
-            globEvents[name].add(handler);
-    }
-}
-
-function focusInput() {
-    dom.input.focus();
-}
-
-function _getRoomDiv(name) {
-    return dom.rooms.querySelector(`div[attr-room="${name}"]`);
-}
-
-function drawRooms() {
-    if (rooms.size == 0) {
-        console.warn('No Rooms!');
-        return;
-    }
-    dom.rooms.innerHTML = Array.from(rooms)
-        .map( (name) => (`<div class="roomName" attr-room="${name}" onclick="app.roomListClicked(this)">${name}</div>`) )
-        .join('');
-    const room = _getRoomDiv(activeSession.currentRoom);
-    if (room) room.classList.add('selected');
-}
-
-function drawUsers() {
-    if (users.size == 0) {
-        console.warn('No Users!');
-        return;
-    }
-    const usr = document.getElementById("all_nicks");
-
-    usr.innerHTML = Array.from(users)
-        .map( (name, idx) => activeSession.userName==name?'':`<div style="color:${userColors[idx]}" onclick="app.userListClicked(this)">${name}</div>`)
-        .join('');
-}
-
-function drawMessages() {
-    const elt = document.getElementById('all_texts');
-    const currentRoomMessages = messagesLog[activeSession.currentRoom];
-    const newContent = currentRoomMessages?
-        currentRoomMessages
-        .map( (message) => `<div class="textLine"><span class="nick" style="color: ${userColors[Array.from(users).indexOf(message[0])]}">${message[0]}</span><span class="text">${message[1]}</span></div>`)
-        .map( renderCommands )
-        .join('')
-    :"<h1>It's empty here!</h1>";
-    elt.innerHTML = newContent;
-    elt.scrollTop = elt.scrollHeight;
 }
 
 function sendText(keypress) {
@@ -136,15 +85,9 @@ function _refreshMessageLog(room, payload) {
     messagesLog[room].push([payload.author, payload.text]);
 }
 
-// DOM callbacks
-const dom = {}
-
 function appInit() {
-    // install ENTER handler for the input
-    dom.rooms = document.getElementById("all_rooms");
-    dom.input = document.getElementById('input_text');
+    domInit();
     dom.input.addEventListener('keydown', sendText);
-
     let passphrase = prompt('challenge:') || false;
     const [login, password] = passphrase ? makeRandomPair(passphrase):[false, false];
     passphrase = undefined;
@@ -171,7 +114,6 @@ function appInit() {
         mqtt.publish(`users/${activeSession.userName}/hello`, {'ipAddress': ipAddr});
         mqtt.subscribe("rooms/#");
         mqtt.subscribe("users/#");
-        focusInput();
         console.log('init finished.');
     }
     mqtt.init(login?`${mqttProto}://${login}:${password}@${host}:${mqttPort}`:`${mqttProto}://${host}:${mqttPort}`, onConnect, messageArrived);
@@ -210,27 +152,6 @@ function enableAudio() {
     }
 }
 
-function roomListClicked(item) {
-    let newRoom = item.textContent;
-    if (activeSession.currentRoom != newRoom) {
-        const oldRoom = activeSession.currentRoom;
-        activeSession.currentRoom = newRoom;
-        if (messagesLog[newRoom] == undefined) {
-            messagesLog[newRoom] = [];
-        }
-        _getRoomDiv(oldRoom).classList.remove('selected');
-        _getRoomDiv(newRoom).classList.add('selected');
-        drawMessages();
-    }
-    event.stopPropagation();
-    return true;
-}
-
-function userListClicked(item) {
-    dom.input.value += `@${item.childNodes[0].data}: `;
-    focusInput();
-}
-
 function createRoom() {
     const roomName = prompt('Room name');
     if (! roomName.match(/^[a-zA-Z0-9-]+$/)) {
@@ -246,7 +167,23 @@ window.app = {
     init: appInit,
     createRoom,
     enableAudio,
-    userListClicked,
-    roomListClicked
+    userListClicked: (elt) => {
+        dom.input.value += `@${elt.childNodes[0].data}: `;
+        dom.input.focus();
+    },
+    roomListClicked: (elt) => {
+        const newRoom = elt.textContent;
+        if (activeSession.currentRoom != newRoom) {
+            const oldRoom = activeSession.currentRoom;
+            activeSession.currentRoom = newRoom;
+            if (messagesLog[newRoom] == undefined) {
+                messagesLog[newRoom] = [];
+            }
+            selectRoom(oldRoom, newRoom);
+            drawMessages();
+        }
+        event.stopPropagation();
+        return true;
+    }
 }
 
