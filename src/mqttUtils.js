@@ -14,8 +14,8 @@ function subscribe(topic) {
     client.subscribe(topic, onError);
 }
 
-function init(url, onConnect, onMessage) {
-    client = connect(url);
+function init(url, clientName, onConnect, onMessage) {
+    client = connect(url, {clientId: clientName});
     client.on('error', (err) => {
         client.options.reconnectPeriod = 0;
         console.log('mqtt init err', err);

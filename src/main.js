@@ -135,7 +135,10 @@ window.app = {
 
         // setup the Mqtt client
         const [mqttProto, mqttPort] = document.location.href.match(/^https/)?['wss',9001]:['ws',9001];
-        mqtt.init(login?`${mqttProto}://${login}:${password}@${host}:${mqttPort}`:`${mqttProto}://${host}:${mqttPort}`, onConnect, messageArrived);
+        mqtt.init(login?`${mqttProto}://${login}:${password}@${host}:${mqttPort}`:`${mqttProto}://${host}:${mqttPort}`,
+            activeSession.userName,
+            onConnect,
+            messageArrived);
 
         activeSession.bellSound = new Audio('/static/snd/bell.mp3');
         activeSession.bellSound.volume = 0.0;
