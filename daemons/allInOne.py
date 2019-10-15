@@ -24,11 +24,6 @@ TEMPLATE = f.read()
 f.close()
 del f
 
-# exported
-KNOWN_ROOMS = set(['main'])
-KNOWN_USERS = set(['bot'])
-MESSAGES = dict()
-
 # internal
 authors = set(['bot'])
 channels = set(['main'])
@@ -45,17 +40,6 @@ def set_author_info(author, **kw):
 
 async def mqtt_pub(topic, payload={}):
     await mqtt_config['client'].publish(topic, json.dumps(payload).encode('ascii'))
-
-def publish_channels():
-    KNOWN_ROOMS.clear()
-    KNOWN_ROOMS.update(channels)
-
-def publish_users():
-    KNOWN_USERS.clear()
-    KNOWN_USERS.update(authors)
-
-def publish_text(room, log):
-    MESSAGES[room] = log
 
 async def handle_newcomer(user, data):
     ip_address = data['ipAddress']
@@ -105,28 +89,18 @@ async def process_message(topic, message):
 
     if split_topic[0] == 'rooms':
         channel = split_topic[1]
-        old_len = len(channels)
         channels.add(channel)
-        if old_len < len(channels):
-            publish_channels()
         if split_topic[2] == 'newtext':
             if not channel in messages:
                 messages[channel] = []
 
-            old_len = len(authors)
             authors.add(obj['author'])
             messages[channel].append([obj['author'], obj['text']])
-            publish_text(channel, messages[channel])
-            if old_len < len(authors):
-                publish_users()
             set_author_info(obj['author'], last_seen=time.time())
     elif split_topic[0] == 'users':
         if split_topic[2] == 'hello':
             await handle_newcomer(split_topic[1], obj)
-            old_len = len(authors)
             authors.add(split_topic[1])
-            if old_len < len(authors):
-                publish_users()
 
 # MQTT Daemon
 
@@ -166,9 +140,9 @@ async def handle(request):
 
 @routes.get('/data/lastinfo')
 async def cb(request):
-    return web.json_response({'users': list(KNOWN_USERS),
-            'rooms': list(KNOWN_ROOMS),
-            'messages': MESSAGES
+    return web.json_response({'users': list(authors),
+            'rooms': list(channels),
+            'messages': messages
             })
 
 routes.static('/static', 'static') # Just in case, prefer nginx instead
@@ -188,13 +162,10 @@ if __name__ == '__main__':
             channels.add(name)
         for room, log in obj['messages'].items():
             messages[room] = log
-            publish_text(room, log)
         for author, info in obj.get('authors_info', {}).items():
             authors_info[author] = info
         for addr, namelist in obj.get('authors_by_addr', {}).items():
             authors_by_addr[addr] = set(namelist)
-    publish_users()
-    publish_channels()
     # run server
     web.run_app(app)
     # save state
