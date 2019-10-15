@@ -6,3 +6,4 @@ aiojobs==0.2.2
 hbmqtt==0.9.5
 async-timeout==3.0.1
 brotlipy==0.7.0
+cchardet==2.1.4
