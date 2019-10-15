@@ -107,7 +107,7 @@ async def process_message(topic, message):
 async def mqttDaemon(request):
     C = MQTTClient(client_id='bot', config={'reconnect_retries': 200, 'reconnect_max_interval': 30, 'keep_alive': 60, 'ping_delay': 30}, loop=asyncio.get_event_loop())
     mqtt_config['client'] = C
-    await C.connect('mqtt://localhost/')
+    await C.connect('mqtt://%s/'%os.environ.get('HOST', 'localhost'))
     await C.subscribe([
             ('rooms/#', QOS_1),
             ('users/#', QOS_1),
