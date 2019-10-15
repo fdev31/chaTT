@@ -36,7 +36,7 @@ messages = dict()
 authors_info = dict()
 authors_by_addr = dict()
 
-solver = aiodns.DNSResolver(loop=asyncio.get_event_loop())
+resolver = aiodns.DNSResolver(loop=asyncio.get_event_loop())
 
 def set_author_info(author, **kw):
     if author not in authors_info:
