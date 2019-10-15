@@ -14,7 +14,6 @@ from hbmqtt.client import MQTTClient, ClientException
 from hbmqtt.mqtt.constants import QOS_1, QOS_2
 
 mqtt_config = {}
-routes = web.RouteTableDef()
 
 # Mqtt bot states & handlers
 
@@ -24,7 +23,8 @@ TEMPLATE = f.read()
 f.close()
 del f
 
-# internal
+# storage/state, should be shareable later
+# using aiocache?
 authors = set(['bot'])
 channels = set(['main'])
 messages = dict()
@@ -43,7 +43,7 @@ async def mqtt_pub(topic, payload={}):
 
 async def handle_newcomer(user, data):
     ip_address = data['ipAddress']
-    hostname = (await resolver.gethostbyaddr(ip_address)).name
+    hostname = resolver.gethostbyaddr(ip_address)
 
     if ip_address in authors_by_addr:
         other_names = authors_by_addr[ip_address]
@@ -77,6 +77,8 @@ async def handle_newcomer(user, data):
                 message.append('Long time no see! ;)')
                 ignore = False
 
+    hostname = (await hostname).name
+
     if not ignore:
         message.append('From %s :: %s'%(hostname, ip_address))
         await mqtt_pub('rooms/main/newtext', {'author': 'bot', 'text': ' '.join(message)})
@@ -105,7 +107,13 @@ async def process_message(topic, message):
 # MQTT Daemon
 
 async def mqttDaemon(request):
-    C = MQTTClient(client_id='bot', config={'reconnect_retries': 200, 'reconnect_max_interval': 30, 'keep_alive': 60, 'ping_delay': 30}, loop=asyncio.get_event_loop())
+    C = MQTTClient(client_id='bot',
+            config={
+                'reconnect_retries': 200,
+                'reconnect_max_interval': 30,
+                'keep_alive': 60,
+                'ping_delay': 30},
+            loop=asyncio.get_event_loop())
     mqtt_config['client'] = C
     await C.connect('mqtt://%s/'%os.environ.get('HOST', 'localhost'))
     await C.subscribe([
@@ -128,6 +136,8 @@ async def mqttDaemon(request):
 
 # HTTP SERVER
 
+routes = web.RouteTableDef()
+
 @routes.get('/')
 async def handle(request):
     host_info = request.headers.get('HTTP_X_FORWARDED_FOR') or request.transport.get_extra_info('peername')
@@ -139,7 +149,7 @@ async def handle(request):
     return web.Response(text=TEMPLATE.replace("{{!ip_addr}}", host_info[0]), content_type='text/html')
 
 @routes.get('/data/lastinfo')
-async def cb(request):
+async def handle(request):
     return web.json_response({'users': list(authors),
             'rooms': list(channels),
             'messages': messages
