@@ -150,7 +150,7 @@ app = web.Application()
 app.add_routes(routes)
 setup(app)
 
-if __name__ == '__main__':
+def main():
     # load state
     if os.path.exists(DB_FILE):
         f = open(DB_FILE)
@@ -179,3 +179,5 @@ if __name__ == '__main__':
         }, f)
     f.close()
 
+if __name__ == '__main__':
+    main()
