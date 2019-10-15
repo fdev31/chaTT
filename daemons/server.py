@@ -57,7 +57,6 @@ def cb():
 def index():
     ip_addr = bottle.request.environ.get('HTTP_X_FORWARDED_FOR', '')
     return template('./templates/index.html',
-            host=HOST,
             ip_addr=ip_addr,
             )
 
