@@ -1,0 +1,26 @@
+# change type: to ssl instead of tcp to enable ssl
+listeners:
+    default:
+        max-connections: 500
+        type: tcp
+#        ssl: on
+#        cafile: /some/cafile
+#        capath: /some/folder
+#        capath: certificate data
+#        certfile: /some/certfile
+#        keyfile: /some/key
+    my-tcp:
+        bind: 127.0.0.1:1883
+    my-ws:
+        bind: 127.0.0.1:9001
+        type: ws
+timeout-disconnect-delay: 2
+auth:
+    # remove the anonymous auth plugin & allow-anonymous: false + set a password file if using the challenge
+    plugins: ['auth.anonymous']
+    allow-anonymous: true
+#     password-file: /some/passwd_file
+topic-check:
+      enabled: True
+      plugins:
+          - topic_access_control_list
