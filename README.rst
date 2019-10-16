@@ -21,7 +21,6 @@ Alternatively, to not be asked for the credentials::
 
 .. note:: you need to replace the `server_*` values with the ones matching your server setup.
 
-
 And connect with your browser::
 
    xdg-open http://localhost:8080/
@@ -53,9 +52,15 @@ You can also export the environment before running ``run.sh``::
 Mqtt
 ====
 
+Since the daemon depends on hbmqtt, a configuration file for the hbmqtt broker is provided::
+
+    hbmqtt -c sample_configs/hbmqtt.yaml
+
 A mosquitto setup is also provided, try the sample config::
 
     mosquitto -c sample_configs/mosquitto.conf
+
+You'll need to proceed to more configuration to enable the challenge, by configuring a password file and disabling the anonymous authentication on MQTT.
 
 Storage (addon)
 ===============
