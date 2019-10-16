@@ -1,3 +1,19 @@
+timeout-disconnect-delay: 2
+auth:
+    # To disable anonymous access:
+    # - uncomment the acl part
+    # - set allow-anonymous to False
+    # - (recommended) enable ssl
+    plugins: ['auth.anonymous', 'auth.acl']
+    allow-anonymous: True
+    password-file: ./sample_configs/password_file
+#     acl:
+#         anonymous: []
+
+topic-check:
+      enabled: True
+      plugins:
+          - topic_access_control_list
 # change type: to ssl instead of tcp to enable ssl
 listeners:
     default:
@@ -14,13 +30,3 @@ listeners:
     my-ws:
         bind: 127.0.0.1:9001
         type: ws
-timeout-disconnect-delay: 2
-auth:
-    # remove the anonymous auth plugin & allow-anonymous: false + set a password file if using the challenge
-    plugins: ['auth.anonymous']
-    allow-anonymous: true
-#     password-file: /some/passwd_file
-topic-check:
-      enabled: True
-      plugins:
-          - topic_access_control_list

@@ -47,7 +47,8 @@ You can also export the environment before running ``run.sh``::
 
 .. note::
 
-    It is also recommended to use HTTPS and the wss socket
+    - It is also recommended to use HTTPS and the wss socket
+    - The sample password file uses the challenge "plop"
 
 Mqtt
 ====
