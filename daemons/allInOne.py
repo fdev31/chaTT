@@ -146,8 +146,7 @@ async def handle(request):
     host_info = request.headers.get('HTTP_X_FORWARDED_FOR') or request.transport.get_extra_info('peername')
 
     if 'job' not in mqtt_config:
-        mqtt_config['job'] = spawn(request, mqttDaemon(request))
-        await mqtt_config['job']
+        mqtt_config['job'] = await spawn(request, mqttDaemon(request))
 
     return web.Response(text=TEMPLATE.replace("{{!ip_addr}}", host_info[0]), content_type='text/html')
 
