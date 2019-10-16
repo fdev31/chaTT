@@ -10,11 +10,13 @@ button > * {
 
 button {
     border: solid 2px #559;
+    background-color: #a29797;
     box-shadow: 2px 2px 3px 2px rgba(5,0,0,0.5);
 }
 button:hover {
-    border: solid 2px #990;
-    background-color: #cfb9b9;
+    border: solid 2px #08a5d2;
+    background-color: #eeeeff;
+    transition-duration: 1s;
 }
 
 .svgIcon {
