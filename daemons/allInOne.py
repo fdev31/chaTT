@@ -38,7 +38,9 @@ def set_author_info(author, **kw):
         authors_info[author] = {}
     authors_info[author].update(kw)
 
-async def mqtt_pub(topic, payload={}):
+async def mqtt_pub(topic, payload={}, delay=None):
+    if delay:
+        await asyncio.sleep(delay)
     await mqtt_config['client'].publish(topic, json.dumps(payload).encode('ascii'))
 
 async def handle_newcomer(user, data):
@@ -81,7 +83,7 @@ async def handle_newcomer(user, data):
 
     if not ignore:
         message.append('From %s :: %s'%(hostname, ip_address))
-        await mqtt_pub('rooms/main/newtext', {'author': 'bot', 'text': ' '.join(message)})
+        await mqtt_pub('rooms/main/newtext', {'author': 'bot', 'text': ' '.join(message)}, delay=2)
 
     set_author_info(user, ip=ip_address, host=hostname, last_connect=time.time(), last_seen=time.time())
 
