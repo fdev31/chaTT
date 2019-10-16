@@ -53,6 +53,8 @@ You can also export the environment before running ``run.sh``::
 Mqtt
 ====
 
+It should work with most MQTT brokers, for convenience, ready to use configs are provided.
+
 Since the daemon depends on hbmqtt, a configuration file for the hbmqtt broker is provided::
 
     hbmqtt -c sample_configs/hbmqtt.yaml
@@ -62,15 +64,6 @@ A mosquitto setup is also provided, try the sample config::
     mosquitto -c sample_configs/mosquitto.conf
 
 You'll need to proceed to more configuration to enable the challenge, by configuring a password file and disabling the anonymous authentication on MQTT.
-
-Storage (addon)
-===============
-
-To enable the storage of messages, you have to run `src/memorize.py`::
-
-    mosquitto_sub -L "mqtt://$USER:$PASS@localhost:1883/rooms/#" -t 'users/#' -v | python ./memorize.py
-
-Look at the header in the file for more information.
 
 
 Roadmap
