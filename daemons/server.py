@@ -6,14 +6,16 @@ import logging
 import asyncio
 
 import aiodns
-import aiojobs
 from aiohttp import web
-from aiojobs.aiohttp import setup, spawn
 
 from hbmqtt.client import MQTTClient, ClientException
 from hbmqtt.mqtt.constants import QOS_1, QOS_2
 
 assert os.path.exists('README.rst'), '-> Run from the chaTT directory please!'
+
+logging.basicConfig(level=logging.INFO)
+
+log = logging.getLogger('MQTT')
 
 mqtt_config = {}
 
@@ -41,6 +43,7 @@ def set_author_info(author, **kw):
     authors_info[author].update(kw)
 
 async def mqtt_pub(topic, payload={}, delay=None):
+    log.info('publish %s => %r', topic, payload)
     if delay:
         await asyncio.sleep(delay)
     await mqtt_config['client'].publish(topic, json.dumps(payload).encode('ascii'))
@@ -92,6 +95,7 @@ async def handle_newcomer(user, data):
 async def process_message(topic, message):
     split_topic = topic.split('/')
     obj = json.loads(message) if message else None
+    log.info('message on %s => %r', topic, message)
 
     if split_topic[0] == 'rooms':
         channel = split_topic[1]
@@ -110,7 +114,7 @@ async def process_message(topic, message):
 
 # MQTT Daemon
 
-async def mqttDaemon(request):
+async def mqttDaemon():
     C = MQTTClient(client_id='bot',
             config={
                 'keep_alive': 6,
@@ -132,12 +136,12 @@ async def mqttDaemon(request):
 
             topic = packet.variable_header.topic_name
             text = packet.payload.data.decode('ascii')
-            await process_message(topic, text)
+            asyncio.create_task(process_message(topic, text))
 
         await C.unsubscribe(['rooms/#', 'users/#'])
         await C.disconnect()
     except ClientException as ce:
-        logger.error("Client exception: %s" % ce)
+        log.error("Client exception: %s" % ce)
 
 # HTTP SERVER
 
@@ -146,10 +150,6 @@ routes = web.RouteTableDef()
 @routes.get('/')
 async def handle(request):
     host_info = request.headers.get('HTTP_X_FORWARDED_FOR') or request.transport.get_extra_info('peername')
-
-    if 'job' not in mqtt_config:
-        mqtt_config['job'] = await spawn(request, mqttDaemon(request))
-
     return web.Response(text=TEMPLATE.replace("{{!ip_addr}}", host_info[0]), content_type='text/html')
 
 @routes.get('/data/lastinfo')
@@ -162,7 +162,12 @@ async def handle(request):
 routes.static('/static', 'static') # Just in case, prefer nginx instead
 app = web.Application()
 app.add_routes(routes)
-setup(app)
+
+async def httpDaemon(app, host, port):
+    runner = web.AppRunner(app)
+    await runner.setup()
+    await web.TCPSite(runner, host, port).start()
+    return runner
 
 def main():
     # load state
@@ -180,8 +185,16 @@ def main():
             authors_info[author] = info
         for addr, namelist in obj.get('authors_by_addr', {}).items():
             authors_by_addr[addr] = set(namelist)
+
     # run server
-    web.run_app(app)
+    apps = [httpDaemon(app, '0.0.0.0', 8080), mqttDaemon()]
+    try:
+        asyncio.get_event_loop().run_until_complete(
+                asyncio.gather(*apps)
+                )
+    except KeyboardInterrupt:
+        print("bye bye")
+
     # save state
     f = open(DB_FILE, 'w')
     json.dump({

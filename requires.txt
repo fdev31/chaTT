@@ -3,4 +3,3 @@ aiohttp==3.6.2
 brotlipy==0.7.0
 cchardet==2.1.4
 aiodns==2.0.0
-aiojobs==0.2.2
