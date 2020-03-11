@@ -117,11 +117,11 @@ async def process_message(topic, message):
 async def mqttDaemon():
     C = MQTTClient(client_id='bot',
             config={
-                'keep_alive': 6,
+                'keep_alive': 50,
                 'ping_delay': 3,
                 'reconnect_max_interval': 3,
                 'reconnect_retries': 200,
-                'keep_alive': 50 }
+                }
             )
     mqtt_config['client'] = C
     await C.connect('mqtt://%s/'%os.environ.get('HOST', 'localhost'))
