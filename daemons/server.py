@@ -34,6 +34,7 @@ channels = set(['main'])
 messages = dict()
 authors_info = dict()
 authors_by_addr = dict()
+trusted_ip_addr = dict()
 
 resolver = aiodns.DNSResolver()
 
@@ -154,6 +155,11 @@ async def handle(request):
 
 @routes.get('/data/lastinfo')
 async def handle(request):
+    host_info = request.headers.get('HTTP_X_FORWARDED_FOR') or request.transport.get_extra_info('peername')
+    user = request.query['user']
+    if user not in trusted_ip_addr:
+        trusted_ip_addr[user] = set()
+    trusted_ip_addr[user].add(host_info)
     return web.json_response({'users': list(authors),
             'rooms': list(channels),
             'messages': messages

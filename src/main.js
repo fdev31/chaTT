@@ -143,7 +143,7 @@ window.app = {
         activeSession.bellSound = new Audio('/static/snd/bell.mp3');
         activeSession.bellSound.volume = 0.0;
 
-        get('/data/lastinfo').then( onLastData );
+        get(`/data/lastinfo?user=${activeSession.userName}`).then( onLastData );
     },
     enableAudio: () => {
         if (activeSession.bellSound.volume == 0.0) {
